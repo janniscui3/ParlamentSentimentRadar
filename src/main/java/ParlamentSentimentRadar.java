@@ -31,12 +31,10 @@ public class ParlamentSentimentRadar {
 
         TimeUnit.SECONDS.sleep(2);
 
-        Document temp = new Document()
-                .append("_id", "abc")
-                .append("datum", "abcd")
-                .append("sitzungsleiter", "afde");
+        Document temp1 = connectionHandler.getDocumentFromCollection("abc", "speeches");
+        System.out.println(temp1);
 
-        connectionHandler.addDocumentToCollection(temp, "speeches");
+        connectionHandler.deleteDocument("speeches", "abc");
     }
 }
 
