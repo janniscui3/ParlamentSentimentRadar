@@ -140,7 +140,6 @@ public class MongoDBConnectionHandler {
         return coll;
     }
 
-
     /**
      * Update a single Document
      * @author Jannis Cui
@@ -170,6 +169,7 @@ public class MongoDBConnectionHandler {
             System.err.println("Unable to update due to an error: " + me);
         }
     }
+
     /**
      * Replace a single Document
      * @author Jannis Cui
@@ -222,6 +222,7 @@ public class MongoDBConnectionHandler {
             System.err.println("Unable to delete due to an error: " + me);
         }
     }
+
     /**
      * Gives an estimateted count of documents in a collection
      * @author Jannis Cui
@@ -237,12 +238,12 @@ public class MongoDBConnectionHandler {
         }
         return estimatedcount;
     }
+
     /**
      * Gives an count of documents specified by query
      * @author Jannis Cui
      * @param collection Collection to update in
      */
-
     public long countDocument(String collection, Bson query) {
         MongoCollection<Document> myCollection = currentDatabase.getCollection(collection);
         long count = 0;
