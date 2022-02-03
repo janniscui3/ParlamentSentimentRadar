@@ -19,52 +19,98 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ * The WebCrawler class itself only has a method that will download a XML
+ * from a given URL and save it in the resources/Bundestag90 folder.
+ * In the Main method of this class we give the method the url of the bundestag XMLs and
+ * iterate over every link.
+ * @author Jannis Cui
+ */
 public class WebCrawler {
 
+    /** This method will return a XML in the resources/Bundestag90 folder from a given URL.
+     * @author Jannis Cui
+     * @param url URL that contains the XML
+     * @throws IOException Exceptions
+     * @throws SAXException Exceptions
+     * @throws ParserConfigurationException Exceptions
+     * @throws TransformerException Exceptions
+     */
     public void DownloadXMLFromURL(URL url) throws IOException, SAXException, ParserConfigurationException, TransformerException {
-        // Turn URL into Document
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder docBuilder = dbf.newDocumentBuilder();
-
-        InputStream stream = url.openStream();
-        org.w3c.dom.Document doc = docBuilder.parse(stream);
-
         // Create helper-strings
         String url1 = url.toString();
         String substr = url1.substring(url1.length() - 14);
         String path = "src/main/resources/Bundestag90/".concat(substr);
 
-        // Convert document into file
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-        Transformer transformer = transformerFactory.newTransformer();
-        DOMSource source = new DOMSource(doc);
+        File file = new File(path);
+        if(!file.isFile()) {
+            // Turn URL into Document
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = dbf.newDocumentBuilder();
 
-        FileWriter writer = new FileWriter(new File(path));
-        StreamResult result = new StreamResult(writer);
+            InputStream stream = url.openStream();
+            org.w3c.dom.Document doc = docBuilder.parse(stream);
 
-        transformer.transform(source, result);
+            // Convert document into file
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource source = new DOMSource(doc);
+
+            FileWriter writer = new FileWriter(new File(path));
+            StreamResult result = new StreamResult(writer);
+
+            transformer.transform(source, result);
+        }
+        else {
+            System.out.println("Das File " + substr + " existiert bereits.");
+        }
     }
 
+    /** Main method used to download all XMLS into resource folder.
+     * Just run this class and it will download all the XML's
+     * @author Jannis Cui
+     * @param args
+     */
     public static void main(String[] args) throws InterruptedException, IOException, ParserConfigurationException, SAXException, TransformerException {
+        Scanner scanner = new Scanner(System.in);
+        String choose = "";
+        System.out.println("Welches Periode von Protokollen wollen sie downloaden? \n 1 für 20. Periode \n 2. für 19. Periode");
+        choose = scanner.nextLine();
         int offset = 0;
-        try {
-            Document doc = Jsoup.connect("https://www.bundestag.de/ajax/filterlist/de/services/opendata/866354-866354?limit=10&noFilterSet=true&offset=0").get();
-            Elements links = doc.select("a");
+        boolean working = true;
+        Document doc;
 
-            for (Element element : links) {
-                System.out.println(element.attr("abs:href"));
+        while (working) {
+            try {
+                if (choose.equals("1")) {
+                    doc = Jsoup.connect("https://www.bundestag.de/ajax/filterlist/de/services/opendata/866354-866354?limit=10&noFilterSet=true&offset=".concat(Integer.toString(offset))).get();
+                }
+                else {
+                    doc = Jsoup.connect("https://www.bundestag.de/ajax/filterlist/de/services/opendata/543410-543410?limit=10&noFilterSet=true&offset=".concat(Integer.toString(offset))).get();
+                }
+                Elements links = doc.select("a");
+
+                if (links.isEmpty()) {
+                    working = false;
+                    System.out.println("Keine XML's mehr gefunden.");
+                }
+                for (Element element : links) {
+                    System.out.println(element.attr("abs:href"));
+                    URL currenturl = new URL(element.attr("abs:href"));
+                    WebCrawler web = new WebCrawler();
+                    web.DownloadXMLFromURL(currenturl);
+                }
             }
+            catch (HttpStatusException ex) {
+                assert true;
+            }
+            offset += 10;
         }
-        catch (HttpStatusException ex) {
-            assert true;
-        }
-
-        URL currenturl = new URL("https://www.bundestag.de/resource/blob/879944/86559dfdad1e7304d92fae71974ad18d/20015-data.xml");
-        WebCrawler web = new WebCrawler();
-        web.DownloadXMLFromURL(currenturl);
     }
 }
