@@ -20,7 +20,7 @@ public class Abgeordnete extends Person_File_Impl {
     private String fraktionname;
     private Fraktion fraktion;
     private ArrayList<String> redeliste = new ArrayList<>();
-
+    private String linktoBild;
     // Utility Attributes
     private Integer durchschnittredelaenge;
 

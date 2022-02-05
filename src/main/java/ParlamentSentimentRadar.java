@@ -123,7 +123,7 @@ public class ParlamentSentimentRadar {
                         break;
                     case "5":
                         // Find given Sitzung in Hashmap Sitzungsliste and then return its content by calling getTextofTagespunkt method.
-                        System.out.println("Geben sie die Sitzungsnummer an: ");
+                        System.out.println("Geben sie die Sitzungsnummer + Wahlperiode im format wahlperiode_sitzungsnr an: ");
                         String sitzungsnr = scanner.nextLine();
                         if (!sitzungliste.containsKey(sitzungsnr)) {
                             System.out.println("Diese Sitzung existiert nicht.");

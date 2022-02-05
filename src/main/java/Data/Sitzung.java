@@ -61,7 +61,9 @@ public class Sitzung {
         return this.sitzungsleiter;
     }
 
-
+    public String getLegislaturperiode() {
+        return this.legislaturperiode;
+    }
     public void setDatum(String datum) {
         this.datum = datum;
     }

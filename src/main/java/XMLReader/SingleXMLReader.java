@@ -241,7 +241,7 @@ public class SingleXMLReader {
                 }
             }
 
-            sitzungsliste.put(sitzungsnr, protokoll);
+            sitzungsliste.put(wahlperiode + "_" + sitzungsnr, protokoll);
         } catch (ParserConfigurationException | SAXException | IOException | NumberFormatException e) {
             e.printStackTrace();
         }
