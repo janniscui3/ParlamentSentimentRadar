@@ -21,10 +21,11 @@ public class Sitzung {
     private HashMap<String, Tagespunkte> tagespunkteliste = new HashMap<>();
     //Constructor
 
-    public Sitzung(String title, String date, String sitzungsltr) {
+    public Sitzung(String title, String date, String sitzungsltr, String wahlperiode) {
         titel = title;
         datum = date;
         sitzungsleiter = sitzungsltr;
+        legislaturperiode = wahlperiode;
     }
 
     public Sitzung(Document obj) {
@@ -60,7 +61,9 @@ public class Sitzung {
         return this.sitzungsleiter;
     }
 
-
+    public String getLegislaturperiode() {
+        return this.legislaturperiode;
+    }
     public void setDatum(String datum) {
         this.datum = datum;
     }

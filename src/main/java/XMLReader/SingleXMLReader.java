@@ -24,7 +24,7 @@ import java.util.HashMap;
  *
  * @author Jannis Cui
  */
-public class Reader {
+public class SingleXMLReader {
     HashMap<String, Abgeordnete> abgeordnetenliste = new HashMap<>();
     HashMap<String, Rede> redeliste = new HashMap<>();
     HashMap<String, Sitzung> sitzungsliste = new HashMap<>();
@@ -40,7 +40,7 @@ public class Reader {
     /**
      * @param fname The file that is to be read
      */
-    public Reader(File fname) {
+    public SingleXMLReader(File fname) {
         filename = fname;
     }
 
@@ -82,7 +82,8 @@ public class Reader {
                         id = element.getAttribute("id");
                         vorname = element.getElementsByTagName("vorname").item(0).getTextContent();
                         nachname = element.getElementsByTagName("nachname").item(0).getTextContent();
-                    } finally {
+                    }
+                    finally {
                         // In some XML Files, there are id's that are the empty string. In particular in 6.xml
                         if (!("".equals(id))) {
                             // Create an instance of a representative(abgeordnete) and put it into the HashMap, if it isn't already in there.
@@ -177,9 +178,11 @@ public class Reader {
 
             // Get root node
             Element dbtplenarprotokoll = doc.getDocumentElement();
+
             // Get sitzung-nr from root node
             String sitzungsnr = dbtplenarprotokoll.getAttribute("sitzung-nr");
             String datum = dbtplenarprotokoll.getAttribute("sitzung-datum");
+            String wahlperiode = dbtplenarprotokoll.getAttribute("wahlperiode");
 
             // Get sitzungsleiter from sitzungsbeginn
             String sitzungsleiter = "Nicht gefunden";
@@ -205,7 +208,7 @@ public class Reader {
                 e.printStackTrace();
             }
 
-            Sitzung protokoll = new Sitzung(sitzungsnr, datum, sitzungsleiter);
+            Sitzung protokoll = new Sitzung(sitzungsnr, datum, sitzungsleiter, wahlperiode);
 
             NodeList tagespunkteliste = doc.getElementsByTagName("tagesordnungspunkt");
 
@@ -238,7 +241,7 @@ public class Reader {
                 }
             }
 
-            sitzungsliste.put(sitzungsnr, protokoll);
+            sitzungsliste.put(wahlperiode + "_" + sitzungsnr, protokoll);
         } catch (ParserConfigurationException | SAXException | IOException | NumberFormatException e) {
             e.printStackTrace();
         }

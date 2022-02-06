@@ -100,7 +100,8 @@ public class MongoDBCollectionHandler {
             Document temp = new Document()
                     .append("_id", i)
                     .append("datum", sitzungliste.get(i).getDatum())
-                    .append("sitzungsleiter", sitzungliste.get(i).getSitzungsleiter());
+                    .append("sitzungsleiter", sitzungliste.get(i).getSitzungsleiter())
+                    .append("legislaturperiode", sitzungliste.get(i).getLegislaturperiode());
 
             HashMap<String, Tagespunkte> tagespunkteliste = sitzungliste.get(i).getTagespunkteliste();
             List<Document> tagesordnungspunkte = new ArrayList<>();
