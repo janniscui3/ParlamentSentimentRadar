@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class CASReadFolderOfXML {
+public class CASFolderSerializer {
     /** Gets a Redeliste and analyses it and creates CAS in a given folder.
      * @param redeliste The Redeliste to be analysed.
      * @throws IOException
@@ -25,7 +25,7 @@ public class CASReadFolderOfXML {
     public static void AnalyseAllTexts(HashMap<String, Rede> redeliste) throws IOException, UIMAException, SAXException {
         int count = 0;
         int amountofreden = redeliste.size();
-        CASReadText analyser = new CASReadText();
+        CASTextSerializer analyser = new CASTextSerializer();
 
         for (String i : redeliste.keySet()) {
             StringBuilder fulltext = new StringBuilder();

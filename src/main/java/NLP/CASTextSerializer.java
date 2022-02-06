@@ -1,6 +1,5 @@
 package NLP;
 
-import Data.Rede;
 import org.apache.uima.UIMAException;
 import org.apache.uima.analysis_engine.AnalysisEngine;
 import org.apache.uima.analysis_engine.metadata.AnalysisEngineMetaData;
@@ -19,19 +18,17 @@ import org.xml.sax.SAXException;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import static org.apache.uima.fit.factory.AnalysisEngineFactory.createEngineDescription;
 
-public class CASReadText {
+public class CASTextSerializer {
     private AnalysisEngine pAE;
     private JCas jCas;
     private XmiCasSerializer jcs;
     private XCASSerializer jbcds;
 
     //Constructor
-    public CASReadText() {
+    public CASTextSerializer() {
         //  creating a Pipeline
         AggregateBuilder pipeline = new AggregateBuilder();
 
