@@ -2,6 +2,8 @@
 import Data.*;
 import Database.MongoDBCollectionHandler;
 import Database.MongoDBConnectionHandler;
+import NLP.CASFolderDeserializer;
+import NLP.CASFolderSerializer;
 import XMLReader.ReadFolderOfXML;
 import it.unimi.dsi.fastutil.Hash;
 import org.bson.Document;
@@ -238,6 +240,29 @@ public class ParlamentSentimentRadar {
                         break;
                     case "15":
                         connectionHandler.addManyDocumentsToCollection(collectionBuilder.createFraktionCollection(), "faction", false);
+                        break;
+                    case "16":
+                        CASFolderSerializer.AnalyseAllTexts(redeliste);
+                        break;
+                    case "17":
+                        System.out.println("Gebe den Ordner an, der die CASXML Dateien hat: ");
+                        String path = scanner.nextLine();
+                        CASFolderSerializer.UploadCASXMLToMongoDB(path, connectionHandler);
+                        break;
+                    case "18":
+                        CASFolderDeserializer casReadEntireFolder = new CASFolderDeserializer();
+                        System.out.println("Gebe den Ordner an, der die CASXML Dateien hat: ");
+                        path = scanner.nextLine();
+                        casReadEntireFolder.initialize(path);
+                        break;
+                    case "19":
+                        fraktionliste = MongoDBCollectionHandler.buildHashMapFaction(connectionHandler.getCollection("faction"));
+                        abgeordnetenliste = MongoDBCollectionHandler.buildHashMapSpeaker(connectionHandler.getCollection("speaker"));
+                        System.out.println("Alles fertig geladen.");
+                        break;
+                    case "20":
+                        sitzungliste = MongoDBCollectionHandler.buildHashMapProtocol(connectionHandler.getCollection("protocol"));
+                        redeliste = MongoDBCollectionHandler.buildHashMapSpeech(connectionHandler.getCollection("speech"));
                         break;
                     default:
                         System.out.println("Falsche Eingabe.");

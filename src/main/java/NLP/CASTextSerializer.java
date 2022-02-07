@@ -78,7 +78,7 @@ public class CASTextSerializer {
      */
     public void analyseText(String fulltext, String redeid) throws UIMAException, IOException, SAXException {
         //Create a file to store CAS serialized as XML
-        File file = new File("/home/muzisama1/Bundestag90CAS/" + redeid + ".xml");
+        File file = new File("src/main/resources/CASData/" + redeid + ".xml");
         if (!file.exists()) {
             // Convert Text into CAS
             jCas = JCasFactory.createText(fulltext, "de");
