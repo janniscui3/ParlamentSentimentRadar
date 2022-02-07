@@ -35,7 +35,7 @@
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
+                <div class="sidebar-brand-text mx-3">Übersicht</div>
             </a>
 
             <!-- Divider -->
@@ -139,10 +139,127 @@
                         <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
                         
                     </div>
+                    
+                    <!--
+                    ###########################
+                    Graphs are implemented here
+                    ###########################
+                    -->
+                    <!-- Content Row -->
+
+                    <div class="row">
+                        <!-- Token Line Chart -->
+                        <div class="col-xl-12 col-lg-7">
+                            <div class="card shadow mb-4">
+                                <!-- Card Header -->
+                                <div
+                                class="card-header py-3 d-flex flex-row align-items-center">
+                                <h6 class="m-0 font-weight-bold text-primary mr-auto">Häufigkeitsverteilung der Tokens in Reden</h6> 
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class="chart-area">
+                                        <canvas id="token_line_chart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>    
+
+
 
                     <!-- Content Row -->
-                    <div class="row">                        
-                    </div>
+
+                    <div class="row">
+                        <!-- POS Vertical Bar Chart -->
+                        <div class="col-xl-12 col-lg-7">
+                            <div class="card shadow mb-4">
+                                <!-- Card Header -->
+                                <div
+                                class="card-header py-3 d-flex flex-row align-items-center">
+                                <h6 class="m-0 font-weight-bold text-primary mr-auto">Häufigkeitsverteilung der POS in Reden</h6> 
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class="chart-area">
+                                        <canvas id="pos_bar_chart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+                    
+
+
+                    <!-- Content Row -->
+
+                    <div class="row">
+                        <!-- Sentiment Radar Chart -->
+                        <div class="col-xl-12 col-lg-7">
+                            <div class="card shadow mb-4">
+                                <!-- Card Header -->
+                                <div
+                                class="card-header py-3 d-flex flex-row align-items-center">
+                                <h6 class="m-0 font-weight-bold text-primary mr-auto">Sentimentverteilung</h6> 
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class="chart-area">
+                                        <canvas id="sentiment_radar_chart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>    
+
+
+
+                    <!-- Content Row -->
+
+                    <div class="row">
+                        <!-- NamedEnt Line Chart -->
+                        <div class="col-xl-12 col-lg-7">
+                            <div class="card shadow mb-4">
+                                <!-- Card Header -->
+                                <div
+                                class="card-header py-3 d-flex flex-row align-items-center">
+                                <h6 class="m-0 font-weight-bold text-primary mr-auto">Häufigkeitsverteilung Named Entities</h6> 
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class="chart-area">
+                                        <canvas id="namedent_line_chart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>   
+
+
+
+
+                    <!-- Content Row -->
+
+                    <div class="row">
+                        <!-- Speaker Bar Chart -->
+                        <div class="col-xl-12 col-lg-7">
+                            <div class="card shadow mb-4">
+                                <!-- Card Header -->
+                                <div
+                                class="card-header py-3 d-flex flex-row align-items-center">
+                                <h6 class="m-0 font-weight-bold text-primary mr-auto">Häufigkeitsverteilung der Redner</h6> 
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class="chart-area">
+                                        <canvas id="speaker_bar_chart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>   
+
+
 
                 </div>
                 <!-- /.container-fluid -->
