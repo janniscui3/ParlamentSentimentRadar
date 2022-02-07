@@ -35,8 +35,8 @@ function number_format(number, decimals, dec_point, thousands_sep) {
 //##################################################
 
 // POS Bar Chart
-var ctx1 = document.getElementById("pos_bar_chart");
-var posbarchart = new Chart(ctx1, {
+var ctx2 = document.getElementById("pos_bar_chart");
+var posbarchart = new Chart(ctx2, {
 type: 'bar',
 data: {
     labels: [],
