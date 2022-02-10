@@ -17,7 +17,7 @@ var sentimentradarchart = new Chart(ctx3, {
       datasets: [{
 
           label: 'My Second Dataset',
-          data: [28, 48, 40],
+          data: [],
           fill: true,
           backgroundColor: 'rgba(54, 162, 235, 0.2)',
           borderColor: 'rgb(54, 162, 235)',
@@ -39,7 +39,7 @@ var sentimentradarchart = new Chart(ctx3, {
           left: 10,
           right: 10,
           top: 0,
-          bottom: -40
+          bottom: -70
           }
       },
 
@@ -51,9 +51,19 @@ var sentimentradarchart = new Chart(ctx3, {
         line: {
           borderWidth: 3
         }
+      },
+
+      scale:{
+        ticks: {
+          beginAtZero : true
+        }
       }
   },
     
   
 });
 
+function updateSentimentRadarChart(newdata){
+  sentimentradarchart.data.datasets[0].data = newdata;
+  sentimentradarchart.update();
+}
