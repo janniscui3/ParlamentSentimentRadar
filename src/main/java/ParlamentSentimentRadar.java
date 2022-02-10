@@ -7,11 +7,14 @@ import NLP.CASFolderSerializer;
 import XMLReader.ReadFolderOfXML;
 import it.unimi.dsi.fastutil.Hash;
 import org.bson.Document;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+
+import static Utilities.Util.sortByValueDescending;
 
 /**
  * Main Class, from which everything is handled.
@@ -71,7 +74,7 @@ public class ParlamentSentimentRadar {
             System.out.println("Drücke 18, um ein Ordner von CASXML Dateien einzulesen und ihre Werte in den Resources zu speichern.");
             System.out.println("Drücke 19, um die Fraktionenliste, Abgeordnetenliste von der Datenbank herunterzuladen.");
             System.out.println("Drücke 20, um die Protokolle + Reden von der Datenbank herunterzuladen(DAUERT LANGE).");
-            System.out.println("Drücke 21, um die häufigsten Tokens zu kriegen.");
+            System.out.println("Drücke 21, um die häufigsten Tokens zu kriegen und sie in die Datenbank hochzuladen.");
             System.out.println("Drücke 22, um die häufigsten NamedEntities zu kriegen.");
             System.out.println("Drücke 23, um die häufigsten Parts of Speech zu kriegen.");
             System.out.println("Drücke 24, um die Sentimentverteilung pro Redner zu kriegen (Alle reden müssen geladen sein).");
@@ -264,6 +267,221 @@ public class ParlamentSentimentRadar {
                         sitzungliste = MongoDBCollectionHandler.buildHashMapProtocol(connectionHandler.getCollection("protocol"));
                         redeliste = MongoDBCollectionHandler.buildHashMapSpeech(connectionHandler.getCollection("speech"));
                         break;
+                    case "21":
+                        // Create a Hashmap containing every token as key and increment its value by one every time we find it in the txt
+                        HashMap<String, Integer> tokencounter = new HashMap<>();
+                        try(BufferedReader br = new BufferedReader(new FileReader("src/main/resources/Tokens.txt"))) {
+                            for(String line; (line = br.readLine()) != null; ) {
+                                if(tokencounter.containsKey(line)) {
+                                    int counter = tokencounter.get(line);
+                                    counter++;
+                                    tokencounter.put(line, counter);
+                                }
+                                else {
+                                    tokencounter.put(line,1);
+                                }
+                            }
+                        }
+                        // Sort Descendingly
+                        Map<String, Integer> tokencounter1 = sortByValueDescending(tokencounter);
+
+                        // Create Document
+                        Document tempdoc = new Document()
+                                .append("_id", "tokens");
+
+                        List<Document> temptokens = new ArrayList<>();
+
+                        for (String i: tokencounter1.keySet()) {
+                            Document tempdoc1 = new Document();
+                            tempdoc1.append("count", Integer.toString(tokencounter1.get(i)));
+                            tempdoc1.append("token", i);
+                            temptokens.add(tempdoc1);
+                        }
+
+                        tempdoc.append("result", temptokens);
+
+                        // Add to Database
+                        connectionHandler.addDocumentToCollection(tempdoc, "statistics");
+                        break;
+                    case "22":
+                        // Create a Hashmap containing every namedentity as key and increment its value by one every time we find it in the txt
+                        HashMap<String, Integer> namedentitiescounter = new HashMap<>();
+                        HashMap<String, String> namedentitiesgroup = new HashMap<>();
+                        try(BufferedReader br = new BufferedReader(new FileReader("src/main/resources/namedentities.txt"))) {
+                            for(String line; (line = br.readLine()) != null; ) {
+                                String[] result = line.split(":");
+                                if (result.length == 2) {
+                                    if(namedentitiescounter.containsKey(result[1])) {
+                                        int counter = namedentitiescounter.get(result[1]);
+                                        counter++;
+                                        namedentitiescounter.put(result[1], counter);
+                                    }
+                                    else {
+                                        namedentitiescounter.put(result[1],1);
+                                        namedentitiesgroup.put(result[1],result[0]);
+                                    }
+                                }
+                            }
+                        }
+
+                        Map<String, Integer> namedentitiescounter1 = sortByValueDescending(namedentitiescounter);
+                        count = 0;
+                        int percount = 0;
+                        int orgcount = 0;
+                        int misccount= 0;
+                        int loccount = 0;
+                        ArrayList<String> PERlist = new ArrayList<>();
+                        ArrayList<String> ORGlist = new ArrayList<>();
+                        ArrayList<String> MISClist = new ArrayList<>();
+                        ArrayList<String> LOClist = new ArrayList<>();
+                        System.out.println("Geben sie an, wieviele sie wollen: ");
+                        maxcount = Integer.parseInt(scanner.nextLine());
+                        maxcount = maxcount * 4;
+                        for (String i: namedentitiescounter1.keySet()) {
+                            if (count == maxcount) {
+                                break;                            }
+                            else if (namedentitiesgroup.get(i).equals("PER") && percount < maxcount/4 ) {
+                                PERlist.add(i);
+                                percount++;
+                            }
+                            else if (namedentitiesgroup.get(i).equals("ORG") && orgcount < maxcount/4) {
+                                ORGlist.add(i);
+                                orgcount++;
+                            }
+                            else if (namedentitiesgroup.get(i).equals("MISC") && misccount < maxcount/4) {
+                                MISClist.add(i);
+                                misccount++;
+                            }
+                            else if (namedentitiesgroup.get(i).equals("LOC") && loccount < maxcount/4) {
+                                LOClist.add(i);
+                                loccount++;
+                            }
+                            count = orgcount + percount + misccount + loccount;
+                        }
+
+                        for (String i: PERlist) {
+                            System.out.println("Namedentity: " + i + " Value: " + namedentitiescounter1.get(i) + " Type: " + namedentitiesgroup.get(i));
+                        }
+                        for (String i: ORGlist) {
+                            System.out.println("Namedentity: " + i + " Value: " + namedentitiescounter1.get(i) + " Type: " + namedentitiesgroup.get(i));
+                        }
+                        for (String i: MISClist) {
+                            System.out.println("Namedentity: " + i + " Value: " + namedentitiescounter1.get(i) + " Type: " + namedentitiesgroup.get(i));
+                        }
+                        for (String i: LOClist) {
+                            System.out.println("Namedentity: " + i + " Value: " + namedentitiescounter1.get(i) + " Type: " + namedentitiesgroup.get(i));
+                        }
+                        break;
+                    case "23":
+                        // Create a Hashmap containing every POS as key and increment its value by one every time we find it in the txt
+                        HashMap<String, Integer> partofspeechcounter = new HashMap<>();
+                        try(BufferedReader br = new BufferedReader(new FileReader("src/main/resources/POS.txt"))) {
+                            for(String line; (line = br.readLine()) != null; ) {
+                                if(partofspeechcounter.containsKey(line)) {
+                                    int counter = partofspeechcounter.get(line);
+                                    counter++;
+                                    partofspeechcounter.put(line, counter);
+                                }
+                                else {
+                                    partofspeechcounter.put(line,1);
+                                }
+                            }
+                        }
+                        Map<String, Integer> partofspeechcounter1 = sortByValueDescending(partofspeechcounter);
+                        for (String i: partofspeechcounter1.keySet()) {
+                            System.out.println("POS: " + i + " Value: " + partofspeechcounter1.get(i));
+                        }
+                    case "24":
+                        // Create a Hashmap containing every redesentiment as key and increment its value by one every time we find it in the txt
+                        HashMap<String, ArrayList<Float>> redesentiment = new HashMap<>();
+                        try(BufferedReader br = new BufferedReader(new FileReader("src/main/resources/Sentiments.txt"))) {
+                            for(String line; (line = br.readLine()) != null; ) {
+                                String[] result = line.split(":");
+                                if(result.length == 2) {
+                                    String[] sentiments = result[1].split(" ");
+                                    ArrayList<Float> floatlist = new ArrayList<>();
+                                    for (String i: sentiments) {
+                                        floatlist.add(Float.parseFloat(i));
+                                    }
+                                    redesentiment.put(result[0], floatlist);
+                                }
+                            }
+                        }
+                        // Iterate over every abgeordnete and get their reden, then find their sentiments in the redesentiment hashmap.
+                        for (String i: abgeordnetenliste.keySet()) {
+                            int possentimentcount = 0;
+                            int neusentimentcount = 0;
+                            int negsentimentcount = 0;
+                            for(String j: abgeordnetenliste.get(i).getRedeliste()) {
+                                if(redesentiment.containsKey(j)) {
+                                    for(Float k: redesentiment.get(j)) {
+                                        if (k > 0) {
+                                            possentimentcount++;
+                                        }
+                                        else if(k == 0) {
+                                            neusentimentcount++;
+                                        }
+                                        else if(k < 0) {
+                                            negsentimentcount++;
+                                        }
+                                    }
+                                }
+                            }
+                            int totalcount = possentimentcount + neusentimentcount + negsentimentcount;
+                            float percentpos = (possentimentcount * 100.0f)/totalcount;
+                            float percentneu = (neusentimentcount * 100.0f)/totalcount;
+                            float percentneg = (negsentimentcount * 100.0f)/totalcount;
+                            if(totalcount > 0) {
+                                System.out.println("Abgeordneter: " + abgeordnetenliste.get(i).getVorName() + " " + abgeordnetenliste.get(i).getNachName() + " Positiv: " + percentpos  + " Neutral: " + percentneu + " Negativ: " + percentneg);
+                            }
+                        }
+                        break;
+                    case "25":
+                        // Create a Hashmap containing every redesentiment as key and increment its value by one every time we find it in the txt
+                        redesentiment = new HashMap<>();
+                        try(BufferedReader br = new BufferedReader(new FileReader("src/main/resources/Sentiments.txt"))) {
+                            for(String line; (line = br.readLine()) != null; ) {
+                                String[] result = line.split(":");
+                                if(result.length == 2) {
+                                    String[] sentiments = result[1].split(" ");
+                                    ArrayList<Float> floatlist = new ArrayList<>();
+                                    for (String i: sentiments) {
+                                        floatlist.add(Float.parseFloat(i));
+                                    }
+                                    redesentiment.put(result[0], floatlist);
+                                }
+                            }
+                        }
+
+                        for (String i: fraktionliste.keySet()) {
+                            int possentimentcount = 0;
+                            int neusentimentcount = 0;
+                            int negsentimentcount = 0;
+                            for (String j: fraktionliste.get(i).getAbgeordnetenliste()) {
+                                for(String k: abgeordnetenliste.get(j).getRedeliste()) {
+                                    if(redesentiment.containsKey(k)) {
+                                        for(Float l: redesentiment.get(k)) {
+                                            if (l > 0) {
+                                                possentimentcount++;
+                                            }
+                                            else if(l == 0) {
+                                                neusentimentcount++;
+                                            }
+                                            else if(l < 0) {
+                                                negsentimentcount++;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            int totalcount = possentimentcount + neusentimentcount + negsentimentcount;
+                            float percentpos = (possentimentcount * 100.0f)/totalcount;
+                            float percentneu = (neusentimentcount * 100.0f)/totalcount;
+                            float percentneg = (negsentimentcount * 100.0f)/totalcount;
+                            if(totalcount > 0) {
+                                System.out.println("Partei: " + fraktionliste.get(i).getName() + " Positiv: " + percentpos  + " Neutral: " + percentneu + " Negativ: " + percentneg);
+                            }
+                        }
                     default:
                         System.out.println("Falsche Eingabe.");
                         break;
