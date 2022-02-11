@@ -42,9 +42,9 @@ data: {
     labels: [],
     datasets: [{
         
-        label: "Anzahl: ",
-        backgroundColor: "#4e73df",
+        label: "Anzahl: ",        
         hoverBackgroundColor: "#2e59d9",
+        pointBackgroundColor: "4e73df",
         borderColor: "#4e73df",
         data: [],
         order: 1
@@ -116,3 +116,9 @@ data: {
   }
 });
 
+
+function updateTokenLineChart(newlabels, newdata){
+  tokenlinechart.data.labels = newlabels;
+  tokenlinechart.data.datasets[0].data = newdata;
+  tokenlinechart.update();
+}

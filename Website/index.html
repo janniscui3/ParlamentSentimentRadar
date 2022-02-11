@@ -3,6 +3,8 @@
 
 <head>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -22,7 +24,7 @@
 
 </head>
 
-<body id="page-top">
+<body id="page-top" onload="javascript:initiatePage()">
 
     <!-- Page Wrapper -->
     <div id="wrapper">
@@ -172,7 +174,7 @@
 
                     <div class="row">
                         <!-- POS Vertical Bar Chart -->
-                        <div class="col-xl-6 col-lg-7">
+                        <div class="col-xl-12 col-lg-7">
                             <div class="card shadow mb-4">
                                 <!-- Card Header -->
                                 <div
@@ -188,8 +190,13 @@
                             </div>
                         </div>
 
+                    </div> 
+                    
+                    <!-- Content Row -->
+
+                    <div class="row">
                         <!-- Sentiment Radar Chart -->
-                        <div class="col-xl-6 col-lg-7">
+                        <div class="col-xl-12 col-lg-7">
                             <div class="card shadow mb-4">
                                 <!-- Card Header -->
                                 <div
@@ -204,13 +211,8 @@
                                 </div>
                             </div>
                         </div>
-
-                    </div> 
-                    
-
-
                    
-
+                    </div>
 
 
                     <!-- Content Row -->
