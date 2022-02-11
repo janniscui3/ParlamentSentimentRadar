@@ -18,8 +18,9 @@ public class Application {
         // Pre-doing some stuff
         Document temp = new Document()
                 .append("_id", "progress")
-                .append("current", connectionHandler.getCollection("CAS").countDocuments())
-                .append("total", connectionHandler.getCollection("speech").countDocuments());
+                .append("current", Long.toString(connectionHandler.getCollection("CAS").countDocuments()))
+                .append("total", Long.toString(connectionHandler.getCollection("speech").countDocuments()))
+                .append("success", "true");
         connectionHandler.replaceDocument("statistics", "progress", temp);
 
         // Options to disable CORS
@@ -52,15 +53,13 @@ public class Application {
         get("/tokens", (req, res) -> {
             Document doc = connectionHandler.getDocumentFromCollection("tokens", "statistics");
             res.raw().setContentType("application/json");
-            res.raw().getWriter().print(doc.toJson());
-            return true;
+            return doc.toJson();
         });
 
         get("/progress", (req, res) -> {
             Document doc = connectionHandler.getDocumentFromCollection("progress", "statistics");
             res.raw().setContentType("application/json");
-            res.raw().getWriter().print(doc.toJson());
-            return true;
+            return doc.toJson();
         });
     }
 }

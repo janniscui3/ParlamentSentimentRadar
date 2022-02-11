@@ -299,6 +299,7 @@ public class ParlamentSentimentRadar {
                         }
 
                         tempdoc.append("result", temptokens);
+                        tempdoc.append("success", "true");
 
                         // Add to Database
                         connectionHandler.replaceDocument("statistics", "tokens", tempdoc);
