@@ -39,14 +39,14 @@ var ctx5 = document.getElementById("speaker_bar_chart");
 var speakerbarchart = new Chart(ctx5, {
     type: 'bar',
     data: {
-        labels: ["merkel","gauland"],
+        labels: [],
         datasets: [{
             
             label: "Anzahl: ",
             backgroundColor: "#4e73df",
             hoverBackgroundColor: "#2e59d9",
             borderColor: "#4e73df",
-            data: [25,21],
+            data: [],
             order: 1
         }],
     },
@@ -119,3 +119,10 @@ var speakerbarchart = new Chart(ctx5, {
     }
 });
 
+
+
+function updateSpeakerBarChart(newlabels, newdata){
+  speakerbarchart.data.labels = newlabels;
+  speakerbarchart.data.datasets[0].data = newdata;
+  speakerbarchart.update();
+}

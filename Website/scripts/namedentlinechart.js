@@ -43,8 +43,8 @@ data: {
     datasets: [{
         
         label: "Anzahl: ",
-        backgroundColor: "#4e73df",
         hoverBackgroundColor: "#2e59d9",
+        pointBackgroundColor: "4e73df",
         borderColor: "#4e73df",
         data: [],
         order: 1
@@ -52,21 +52,21 @@ data: {
     
     {   
         label: "Anzahl: ",
-        backgroundColor: "#4e73df",
         hoverBackgroundColor: "#2e59d9",
+        pointBackgroundColor: "4e73df",
         borderColor: "#4e73df",
         data: [],
-        order: 1
+        order: 2
 
     },
 
     {   
         label: "Anzahl: ",
-        backgroundColor: "#4e73df",
         hoverBackgroundColor: "#2e59d9",
+        pointBackgroundColor: "4e73df",
         borderColor: "#4e73df",
         data: [],
-        order: 1
+        order: 3
 
     }
 
@@ -138,3 +138,11 @@ data: {
   }
 });
 
+
+function updateNamedEntLineChart(newlabels, newdata){
+  namedentlinechart.data.labels = newlabels
+  namedentlinechart.data.datasets[0].data = newdata[0];
+  namedentlinechart.data.datasets[1].data = newdata[1];
+  namedentlinechart.data.datasets[2].data = newdata[2];
+  namedentlinechart.update();
+}

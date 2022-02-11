@@ -116,3 +116,9 @@ data: {
   }
 });
 
+
+function updatePosBarChart(newlabels, newdata){
+  posbarchart.data.labels = newlabels;
+  posbarchart.data.datasets[0].data = newdata;
+  posbarchart.update();
+}
