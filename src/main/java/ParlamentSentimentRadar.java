@@ -301,7 +301,7 @@ public class ParlamentSentimentRadar {
                         tempdoc.append("result", temptokens);
 
                         // Add to Database
-                        connectionHandler.addDocumentToCollection(tempdoc, "statistics");
+                        connectionHandler.replaceDocument("statistics", "tokens", tempdoc);
                         break;
                     case "22":
                         // Create a Hashmap containing every namedentity as key and increment its value by one every time we find it in the txt

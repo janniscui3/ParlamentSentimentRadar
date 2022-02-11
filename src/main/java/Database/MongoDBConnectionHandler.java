@@ -179,9 +179,10 @@ public class MongoDBConnectionHandler {
      */
     public void replaceDocument(String collection, String queryid, Document replacedocument) {
         MongoCollection<Document> myCollection = currentDatabase.getCollection(collection);
+        ReplaceOptions opts = new ReplaceOptions().upsert(true);
         Document docquery = new Document().append("_id",  queryid);
         try {
-            UpdateResult result = myCollection.replaceOne(docquery, replacedocument);
+            UpdateResult result = myCollection.replaceOne(docquery, replacedocument, opts);
             System.out.println("Modified document count: " + result.getModifiedCount());
             System.out.println("Upserted id: " + result.getUpsertedId()); // only contains a value when an upsert is performed
         }

@@ -9,10 +9,20 @@ import java.net.URLClassLoader;
 import Database.MongoDBConnectionHandler;
 import static spark.Spark.*;
 
+/** Spark that will run the api.
+ * @Author Jannis Cui, Timo Eisert
+ */
 public class Application {
     public static void main(String[] args) {
         MongoDBConnectionHandler connectionHandler = new MongoDBConnectionHandler();
-        
+        // Pre-doing some stuff
+        Document temp = new Document()
+                .append("_id", "progress")
+                .append("current", connectionHandler.getCollection("CAS").countDocuments())
+                .append("total", connectionHandler.getCollection("speech").countDocuments());
+        connectionHandler.replaceDocument("statistics", "progress", temp);
+
+        // Options to disable CORS
         options("/*",
         (request, response) -> {
 
@@ -37,8 +47,17 @@ public class Application {
             response.header("Access-Control-Allow-Origin", "*");
         });
 
+
+        // Main Paths
         get("/tokens", (req, res) -> {
             Document doc = connectionHandler.getDocumentFromCollection("tokens", "statistics");
+            res.raw().setContentType("application/json");
+            res.raw().getWriter().print(doc.toJson());
+            return true;
+        });
+
+        get("/progress", (req, res) -> {
+            Document doc = connectionHandler.getDocumentFromCollection("progress", "statistics");
             res.raw().setContentType("application/json");
             res.raw().getWriter().print(doc.toJson());
             return true;
