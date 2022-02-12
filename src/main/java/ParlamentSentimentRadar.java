@@ -75,8 +75,8 @@ public class ParlamentSentimentRadar {
             System.out.println("Drücke 19, um die Fraktionenliste, Abgeordnetenliste von der Datenbank herunterzuladen.");
             System.out.println("Drücke 20, um die Protokolle + Reden von der Datenbank herunterzuladen(DAUERT LANGE).");
             System.out.println("Drücke 21, um die häufigsten Tokens zu kriegen und sie in die Datenbank hochzuladen.");
-            System.out.println("Drücke 22, um die häufigsten NamedEntities zu kriegen.");
-            System.out.println("Drücke 23, um die häufigsten Parts of Speech zu kriegen.");
+            System.out.println("Drücke 22, um die häufigsten NamedEntities zu kriegen und sie in die Datenbank hochzuladen.");
+            System.out.println("Drücke 23, um die häufigsten Parts of Speech zu kriegen und sie in die Datenbank hochzuladen.");
             System.out.println("Drücke 24, um die Sentimentverteilung pro Redner zu kriegen (Alle reden müssen geladen sein).");
             System.out.println("Drücke 25, um die Sentimentverteilung pro Partei zu kriegen (Alle reden müssen geladen sein).");
             String choose = scanner.nextLine();
@@ -278,7 +278,9 @@ public class ParlamentSentimentRadar {
                                     tokencounter.put(line, counter);
                                 }
                                 else {
-                                    tokencounter.put(line,1);
+                                    if (!line.startsWith("#")) {
+                                        tokencounter.put(line,1);
+                                    }
                                 }
                             }
                         }
@@ -318,8 +320,10 @@ public class ParlamentSentimentRadar {
                                         namedentitiescounter.put(result[1], counter);
                                     }
                                     else {
-                                        namedentitiescounter.put(result[1],1);
-                                        namedentitiesgroup.put(result[1],result[0]);
+                                        if (!line.startsWith("#")) {
+                                            namedentitiescounter.put(result[1],1);
+                                            namedentitiesgroup.put(result[1],result[0]);
+                                        }
                                     }
                                 }
                             }
@@ -384,14 +388,32 @@ public class ParlamentSentimentRadar {
                                     partofspeechcounter.put(line, counter);
                                 }
                                 else {
-                                    partofspeechcounter.put(line,1);
+                                    if (!line.startsWith("#")) {
+                                        partofspeechcounter.put(line,1);
+                                    }
                                 }
                             }
                         }
                         Map<String, Integer> partofspeechcounter1 = sortByValueDescending(partofspeechcounter);
+
+                        // Create Document
+                        Document tempPOSdoc = new Document()
+                                .append("_id", "POS");
+
+                        List<Document> tempPOS = new ArrayList<>();
+
                         for (String i: partofspeechcounter1.keySet()) {
-                            System.out.println("POS: " + i + " Value: " + partofspeechcounter1.get(i));
+                            Document tempdoc1 = new Document();
+                            tempdoc1.append("count", Integer.toString(partofspeechcounter1.get(i)));
+                            tempdoc1.append("POS", i);
+                            tempPOS.add(tempdoc1);
                         }
+
+                        tempPOSdoc.append("result", tempPOS);
+                        tempPOSdoc.append("success", "true");
+                        // Add to Database
+                        connectionHandler.replaceDocument("statistics", "POS", tempPOSdoc);
+                        break;
                     case "24":
                         // Create a Hashmap containing every redesentiment as key and increment its value by one every time we find it in the txt
                         HashMap<String, ArrayList<Float>> redesentiment = new HashMap<>();
@@ -408,6 +430,26 @@ public class ParlamentSentimentRadar {
                                 }
                             }
                         }
+
+                        // Create Document
+                        Document tempsentimentdoc = new Document()
+                                .append("_id", "sentiment");
+
+                        List<Document> tempsentiments = new ArrayList<>();
+
+                        for (String i: redesentiment.keySet()) {
+                            Document tempdoc1 = new Document();
+                            tempdoc1.append("id", i);
+                            tempdoc1.append("sentiment", redeliste.get(i));
+                            tempsentiments.add(tempdoc1);
+                        }
+
+                        tempsentimentdoc.append("result", tempsentiments);
+                        tempsentimentdoc.append("success", "true");
+
+                        // Add to Database
+                        connectionHandler.replaceDocument("statistics", "sentiments", tempsentimentdoc);
+
                         // Iterate over every abgeordnete and get their reden, then find their sentiments in the redesentiment hashmap.
                         for (String i: abgeordnetenliste.keySet()) {
                             int possentimentcount = 0;
@@ -483,6 +525,9 @@ public class ParlamentSentimentRadar {
                                 System.out.println("Partei: " + fraktionliste.get(i).getName() + " Positiv: " + percentpos  + " Neutral: " + percentneu + " Negativ: " + percentneg);
                             }
                         }
+                    case "26":
+
+                        break;
                     default:
                         System.out.println("Falsche Eingabe.");
                         break;

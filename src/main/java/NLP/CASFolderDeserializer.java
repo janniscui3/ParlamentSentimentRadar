@@ -75,6 +75,7 @@ public class CASFolderDeserializer {
                     //Create Content of Tokens.txt
                     fr = new FileWriter(tokens, true);
                     br = new BufferedWriter(fr);
+                    br.write("#" + redeid + "\n");
                     for (Token token : JCasUtil.select(jCas, Token.class)) {
                         br.write(token.getLemmaValue() + "\n");
                     }
@@ -84,6 +85,7 @@ public class CASFolderDeserializer {
                     //Create Content of POS.txt
                     fr = new FileWriter(pos, true);
                     br = new BufferedWriter(fr);
+                    br.write("#" + redeid + "\n");
                     for (POS pos1 : JCasUtil.select(jCas, POS.class)) {
                         StringBuilder sb1 = new StringBuilder();
                         sb1.append(pos1.getPosValue()).append("\n");
@@ -95,6 +97,7 @@ public class CASFolderDeserializer {
                     //Create Content of namedentities.txt
                     fr = new FileWriter(namedentities, true);
                     br = new BufferedWriter(fr);
+                    br.write("#" + redeid + "\n");
                     for (NamedEntity namedEntity : JCasUtil.select(jCas, NamedEntity.class)) {
                         StringBuilder sb1 = new StringBuilder();
                         sb1.append(namedEntity.getValue()).append(":").append(namedEntity.getCoveredText()).append("\n");

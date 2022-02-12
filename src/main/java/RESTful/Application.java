@@ -61,5 +61,11 @@ public class Application {
             res.raw().setContentType("application/json");
             return doc.toJson();
         });
+
+        get("/pos", (req, res) -> {
+            Document doc = connectionHandler.getDocumentFromCollection("POS", "statistics");
+            res.raw().setContentType("application/json");
+            return doc.toJson();
+        });
     }
 }
