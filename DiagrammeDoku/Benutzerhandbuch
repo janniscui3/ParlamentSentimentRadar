@@ -1,0 +1,17 @@
+Herunterladen der Daten vom Bundestag:
+	1. Starten sie Intellij und gehe in den parlamentsentimentradar/src/main/java/XMLReader ordner.
+	2. Führen Webcrawler aus
+
+Verarbeiten von Daten:
+	1. Starten sie Intellij und gehe in den parlamentsentimentradar/src/main/java ordner
+	2. Führe Parlamentsentimentradar aus.
+	
+Website starten:
+	1. Starten sie IntelliJ und gehe in den parlamentsentimentradar/src/main/java/RESTful ordner.
+	2. Führe Application aus.
+	3. Öffnen sie index.html in parlamentsentimentradar/Website. Die Website lädt dann alle nötigen Daten von der Datenbank automatisch.
+	
+Benutzung der Website:
+	Suchen:
+		Suchen geht über die Dashboard-Leiste ganz oben.
+	
