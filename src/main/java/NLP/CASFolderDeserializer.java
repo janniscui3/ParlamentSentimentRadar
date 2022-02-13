@@ -31,7 +31,7 @@ public class CASFolderDeserializer {
 
     /**
      * Will read all XMLs from a file and get their Data and save it in the resources folder.
-     *
+     * @author Jannis Cui
      * @param filepath Filepath to read Data from
      * @throws ResourceInitializationException a
      * @throws IOException                     a

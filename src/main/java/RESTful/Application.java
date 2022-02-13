@@ -67,5 +67,11 @@ public class Application {
             res.raw().setContentType("application/json");
             return doc.toJson();
         });
+
+        get("/namedEntities", (req, res) -> {
+            Document doc = connectionHandler.getDocumentFromCollection("namedentities", "statistics");
+            res.raw().setContentType("application/json");
+            return doc.toJson();
+        });
     }
 }

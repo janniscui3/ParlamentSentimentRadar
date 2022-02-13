@@ -17,6 +17,7 @@ import java.util.List;
 
 public class CASFolderSerializer {
     /** Gets a Redeliste and analyses it and creates CAS in a given folder.
+     * @author Jannis Cui
      * @param redeliste The Redeliste to be analysed.
      * @throws IOException
      * @throws UIMAException
@@ -40,7 +41,8 @@ public class CASFolderSerializer {
         }
     }
 
-    /** Uploads CAS to a given MongoDB
+    /** Uploads CAS to a given MongoDBs
+     * @author Jannis Cui
      * @param filepath Files to be uploaded in a filepath
      * @param mongoDBConnectionHandler The connectionhandler to a database
      */

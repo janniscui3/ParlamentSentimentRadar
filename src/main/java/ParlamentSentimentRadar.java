@@ -330,52 +330,74 @@ public class ParlamentSentimentRadar {
                         }
 
                         Map<String, Integer> namedentitiescounter1 = sortByValueDescending(namedentitiescounter);
-                        count = 0;
-                        int percount = 0;
-                        int orgcount = 0;
-                        int misccount= 0;
-                        int loccount = 0;
                         ArrayList<String> PERlist = new ArrayList<>();
                         ArrayList<String> ORGlist = new ArrayList<>();
                         ArrayList<String> MISClist = new ArrayList<>();
                         ArrayList<String> LOClist = new ArrayList<>();
-                        System.out.println("Geben sie an, wieviele sie wollen: ");
-                        maxcount = Integer.parseInt(scanner.nextLine());
-                        maxcount = maxcount * 4;
+
                         for (String i: namedentitiescounter1.keySet()) {
-                            if (count == maxcount) {
-                                break;                            }
-                            else if (namedentitiesgroup.get(i).equals("PER") && percount < maxcount/4 ) {
+                            if (namedentitiesgroup.get(i).equals("PER")) {
                                 PERlist.add(i);
-                                percount++;
                             }
-                            else if (namedentitiesgroup.get(i).equals("ORG") && orgcount < maxcount/4) {
+                            else if (namedentitiesgroup.get(i).equals("ORG")) {
                                 ORGlist.add(i);
-                                orgcount++;
                             }
-                            else if (namedentitiesgroup.get(i).equals("MISC") && misccount < maxcount/4) {
+                            else if (namedentitiesgroup.get(i).equals("MISC")) {
                                 MISClist.add(i);
-                                misccount++;
                             }
-                            else if (namedentitiesgroup.get(i).equals("LOC") && loccount < maxcount/4) {
+                            else if (namedentitiesgroup.get(i).equals("LOC")) {
                                 LOClist.add(i);
-                                loccount++;
                             }
-                            count = orgcount + percount + misccount + loccount;
                         }
 
-                        for (String i: PERlist) {
-                            System.out.println("Namedentity: " + i + " Value: " + namedentitiescounter1.get(i) + " Type: " + namedentitiesgroup.get(i));
+                        // TODO: Refactor this
+                        // Create Document
+                        Document tempnameddoc = new Document()
+                                .append("_id", "namedentities");
+
+                        List<Document> resultnamed = new ArrayList<>();
+
+                        // Persons
+                        Document tempdocperson = new Document();
+                        List<Document> tempdoclistpersons = new ArrayList<>();
+                        for (String i : PERlist) {
+                            Document tempdoc1 = new Document();
+                            tempdoc1.append("count", namedentitiescounter1.get(i));
+                            tempdoc1.append("element", i);
+                            tempdoclistpersons.add(tempdoc1);
                         }
-                        for (String i: ORGlist) {
-                            System.out.println("Namedentity: " + i + " Value: " + namedentitiescounter1.get(i) + " Type: " + namedentitiesgroup.get(i));
+                        tempdocperson.append("persons", tempdoclistpersons);
+                        resultnamed.add(tempdocperson);
+
+                        // Organisations
+                        Document tempdocorg = new Document();
+                        List<Document> tempdoclistorg = new ArrayList<>();
+                        for (String i : ORGlist) {
+                            Document tempdoc1 = new Document();
+                            tempdoc1.append("count", namedentitiescounter1.get(i));
+                            tempdoc1.append("element", i);
+                            tempdoclistorg.add(tempdoc1);
                         }
-                        for (String i: MISClist) {
-                            System.out.println("Namedentity: " + i + " Value: " + namedentitiescounter1.get(i) + " Type: " + namedentitiesgroup.get(i));
+                        tempdocorg.append("organisations", tempdoclistorg);
+                        resultnamed.add(tempdocorg);
+
+                        // Location
+                        Document tempdocloc = new Document();
+                        List<Document> tempdoclistloc = new ArrayList<>();
+                        for (String i : LOClist) {
+                            Document tempdoc1 = new Document();
+                            tempdoc1.append("count", namedentitiescounter1.get(i));
+                            tempdoc1.append("element", i);
+                            tempdoclistloc.add(tempdoc1);
                         }
-                        for (String i: LOClist) {
-                            System.out.println("Namedentity: " + i + " Value: " + namedentitiescounter1.get(i) + " Type: " + namedentitiesgroup.get(i));
-                        }
+                        tempdocloc.append("locations", tempdoclistloc);
+                        resultnamed.add(tempdocloc);
+
+
+                        tempnameddoc.append("result", resultnamed);
+                        tempnameddoc.append("success", "true");
+
+                        connectionHandler.replaceDocument("statistics", "namedentities", tempnameddoc);
                         break;
                     case "23":
                         // Create a Hashmap containing every POS as key and increment its value by one every time we find it in the txt
