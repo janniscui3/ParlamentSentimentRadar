@@ -73,5 +73,11 @@ public class Application {
             res.raw().setContentType("application/json");
             return doc.toJson();
         });
+
+        get("/sentiment", (req, res) -> {
+            Document doc = connectionHandler.getDocumentFromCollection("sentiment", "statistics");
+            res.raw().setContentType("application/json");
+            return doc.toJson();
+        });
     }
 }

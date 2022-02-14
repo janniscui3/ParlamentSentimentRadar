@@ -68,6 +68,7 @@ public class ParlamentSentimentRadar {
             System.out.println("Drücke 23, um die häufigsten Parts of Speech zu kriegen und sie in die Datenbank hochzuladen.");
             System.out.println("Drücke 24, um die Sentimentverteilung pro Redner zu kriegen (Alle reden müssen geladen sein).");
             System.out.println("Drücke 25, um die Sentimentverteilung pro Partei zu kriegen (Alle reden müssen geladen sein).");
+            System.out.println("Drücke 26, um die allgemeine Sentimentverteilung zu kriegen und sie hochzuladen.");
             String choose = scanner.nextLine();
 
             try {
@@ -282,73 +283,10 @@ public class ParlamentSentimentRadar {
                         connectionHandler.replaceDocument("statistics", "POS", tempPOSdoc);
                         break;
                     case "24":
-                        // Create a Hashmap containing every redesentiment as key and increment its value by one every time we find it in the txt
-                        HashMap<String, ArrayList<Float>> redesentiment = new HashMap<>();
-                        try(BufferedReader br = new BufferedReader(new FileReader("src/main/resources/Sentiments.txt"))) {
-                            for(String line; (line = br.readLine()) != null; ) {
-                                String[] result = line.split(":");
-                                if(result.length == 2) {
-                                    String[] sentiments = result[1].split(" ");
-                                    ArrayList<Float> floatlist = new ArrayList<>();
-                                    for (String i: sentiments) {
-                                        floatlist.add(Float.parseFloat(i));
-                                    }
-                                    redesentiment.put(result[0], floatlist);
-                                }
-                            }
-                        }
-
-                        // Create Document
-                        Document tempsentimentdoc = new Document()
-                                .append("_id", "sentiment");
-
-                        List<Document> tempsentiments = new ArrayList<>();
-
-                        for (String i: redesentiment.keySet()) {
-                            Document tempdoc1 = new Document();
-                            tempdoc1.append("id", i);
-                            tempdoc1.append("sentiment", redeliste.get(i));
-                            tempsentiments.add(tempdoc1);
-                        }
-
-                        tempsentimentdoc.append("result", tempsentiments);
-                        tempsentimentdoc.append("success", "true");
-
-                        // Add to Database
-                        connectionHandler.replaceDocument("statistics", "sentiments", tempsentimentdoc);
-
-                        // Iterate over every abgeordnete and get their reden, then find their sentiments in the redesentiment hashmap.
-                        for (String i: abgeordnetenliste.keySet()) {
-                            int possentimentcount = 0;
-                            int neusentimentcount = 0;
-                            int negsentimentcount = 0;
-                            for(String j: abgeordnetenliste.get(i).getRedeliste()) {
-                                if(redesentiment.containsKey(j)) {
-                                    for(Float k: redesentiment.get(j)) {
-                                        if (k > 0) {
-                                            possentimentcount++;
-                                        }
-                                        else if(k == 0) {
-                                            neusentimentcount++;
-                                        }
-                                        else if(k < 0) {
-                                            negsentimentcount++;
-                                        }
-                                    }
-                                }
-                            }
-                            int totalcount = possentimentcount + neusentimentcount + negsentimentcount;
-                            float percentpos = (possentimentcount * 100.0f)/totalcount;
-                            float percentneu = (neusentimentcount * 100.0f)/totalcount;
-                            float percentneg = (negsentimentcount * 100.0f)/totalcount;
-                            if(totalcount > 0) {
-                                System.out.println("Abgeordneter: " + abgeordnetenliste.get(i).getVorName() + " " + abgeordnetenliste.get(i).getNachName() + " Positiv: " + percentpos  + " Neutral: " + percentneu + " Negativ: " + percentneg);
-                            }
-                        }
                         break;
                     case "25":
                         // Create a Hashmap containing every redesentiment as key and increment its value by one every time we find it in the txt
-                        redesentiment = new HashMap<>();
+                        HashMap<String, ArrayList<Float>> redesentiment = new HashMap<>();
                         try(BufferedReader br = new BufferedReader(new FileReader("src/main/resources/Sentiments.txt"))) {
                             for(String line; (line = br.readLine()) != null; ) {
                                 String[] result = line.split(":");
@@ -393,7 +331,47 @@ public class ParlamentSentimentRadar {
                             }
                         }
                     case "26":
+                        HashMap<String, Integer> redesentiments = new HashMap<>();
+                        try(BufferedReader br = new BufferedReader(new FileReader("src/main/resources/Sentiments.txt"))) {
+                            for(String line; (line = br.readLine()) != null; ) {
+                                String[] result = line.split(":");
+                                if(result.length == 2) {
+                                    String[] sentiments = result[1].split(" ");
+                                    for (String j : sentiments) {
+                                        if (redesentiments.containsKey(j)) {
+                                            int counter = redesentiments.get(j);
+                                            counter++;
+                                            redesentiments.put(j, counter);
+                                        }
+                                        else {
+                                            redesentiments.put(j, 1);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        Map<String, Integer> redesentiments1 = sortByValueDescending(redesentiments);
 
+                        // Create document
+
+                        Document tempsentimentdoc = new Document()
+                                .append("_id", "sentiment");
+
+                        List<Document> tempsentimentdoclist = new ArrayList<>();
+
+                        for(String i: redesentiments1.keySet()) {
+                            Document tempdoc1 = new Document();
+
+                            tempdoc1.append("sentiment", i);
+                            tempdoc1.append("count", redesentiments1.get(i));
+
+                            tempsentimentdoclist.add(tempdoc1);
+                        }
+
+                        tempsentimentdoc.append("result", tempsentimentdoclist);
+                        tempsentimentdoc.append("success", "true");
+
+                        connectionHandler.replaceDocument("statistics", "sentiment", tempsentimentdoc);
                         break;
                     default:
                         System.out.println("Falsche Eingabe.");
