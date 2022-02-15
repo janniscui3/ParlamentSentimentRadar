@@ -7,10 +7,11 @@ function initiatePage(){
     getTokens();
     getPOS();
     getSentiment();
+    getNamedentities();
     //updateTokenLineChart(["Peter","Olaf","Martin"],[13,23,400])
     
     
-    updateNamedEntLineChart(["1","2","3","4","5"],[[274,253,192,115],[223,210,130,75],[299,221,132,15,5]]);
+   
     updateSpeakerBarChart(["Peter","Olaf","Martin"],[13,23,400]);
 }
 
@@ -152,6 +153,77 @@ function getSentiment(){
                     
                     updateSentimentRadarChart(sentimentcounter);
                   
+                }
+                else{
+                    alert("ERROR");
+                }
+            },
+            error: function (error){
+                alert("ERROR");
+            }
+        });			
+    });    
+}
+
+function getNamedentities(){
+    $(function(){
+		$.ajax({
+			method: "GET",
+            dataType: "json",
+			url: "http://localhost:4567/namedEntities",	
+
+            success: function(data){
+                
+                if (data["success"] == "true"){
+                    var namedentitylist = data["result"];
+
+                    var person_list = namedentitylist[0]["persons"];
+                    var organisation_list = namedentitylist[1]["organisations"];
+                    var location_list = namedentitylist[2]["locations"];
+                    
+                    
+
+                    var label_list = [[],[],[]]
+                    var count_list = [[],[],[]]
+
+                    for(var i = 0; i < 50; i++){
+                        label_list[0].push(location_list[i]["element"]);
+                        label_list[1].push(organisation_list[i]["element"]); 
+                        label_list[2].push(person_list[i]["element"]);
+
+                        count_list[0].push(location_list[i]["count"]);                       
+                        count_list[1].push(organisation_list[i]["count"]);
+                        count_list[2].push(person_list[i]["count"]);
+                    }
+
+                    
+                    updateNamedEntLineChart(label_list,count_list);
+
+                    
+                    
+                    
+                    /*
+                    for(var i = 0; i < sentiment_list.length; i++) {
+                        var curr_sentiment = parseFloat(sentiment_list[i]["sentiment"]);
+                        var curr_count = sentiment_list[i]["count"];
+                        
+
+                        if(curr_sentiment > 0){
+                            sentimentcounter[0] += curr_count;
+                        }
+                        else if(curr_sentiment === 0){
+                            
+                            sentimentcounter[1] += curr_count;    
+                        }
+                        else{
+                            sentimentcounter[2] += curr_count;   
+                        }
+                    }
+                    
+
+                    updateSentimentRadarChart(sentimentcounter);
+                    
+                    */
                 }
                 else{
                     alert("ERROR");

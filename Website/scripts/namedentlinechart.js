@@ -39,34 +39,45 @@ var ctx4 = document.getElementById("namedent_line_chart");
 var namedentlinechart = new Chart(ctx4, {
 type: 'line',
 data: {
-    labels: [],
+    
+    labels: [...Array(50).keys()],
     datasets: [{
         
-        label: "Anzahl: ",
+        label: "Orte ",
         hoverBackgroundColor: "#2e59d9",
-        pointBackgroundColor: "4e73df",
+        pointBackgroundColor: "#3a3b45",
         borderColor: "#4e73df",
         data: [],
-        order: 1
+        custom_labels: [],
+        order: 1,
+        fill: false,
+
+       
     },
     
     {   
-        label: "Anzahl: ",
-        hoverBackgroundColor: "#2e59d9",
-        pointBackgroundColor: "4e73df",
-        borderColor: "#4e73df",
+        label: "Organisationen ",
+        hoverBackgroundColor: "#17a673",
+        pointBackgroundColor: "#3a3b45",
+        borderColor: "#1cc88a",
         data: [],
-        order: 2
+        custom_labels: [],
+        order: 2,
+        fill: false,
+       
 
     },
 
     {   
-        label: "Anzahl: ",
-        hoverBackgroundColor: "#2e59d9",
-        pointBackgroundColor: "4e73df",
-        borderColor: "#4e73df",
+        label: "Personen ",
+        hoverBackgroundColor: "#b3428d",
+        pointBackgroundColor: "#3a3b45",
+        borderColor: "#f759c3",
         data: [],
-        order: 3
+        custom_labels: [],
+        order: 3,
+        fill: false,
+       
 
     }
 
@@ -84,9 +95,11 @@ data: {
     },
     scales: {
       xAxes: [{
+        /*
         time: {
           unit: 'Anzahl'
         },
+        */
         gridLines: {
           display: true,
           drawBorder: true
@@ -129,10 +142,27 @@ data: {
       displayColors: false,
       caretPadding: 10,
       callbacks: {
+        
+        title: function(tooltipItem, chart) {
+          var set_index = tooltipItem[0].datasetIndex;
+          var item_index = tooltipItem[0].index;
+          
+          var curr_name = chart.datasets[set_index].custom_labels[item_index]
+          return curr_name;
+        },
+        
         label: function(tooltipItem, chart) {
           var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-          return datasetLabel + number_format(tooltipItem.yLabel);
+          
+          return "Anzahl: " + number_format(tooltipItem.yLabel);
+        },
+
+        labelTextColor: function(tooltipItem, chart) {
+          var set_index = tooltipItem.datasetIndex;
+          var new_color = chart.data.datasets[set_index].borderColor;
+          return new_color;
         }
+      
       }
     },
   }
@@ -140,9 +170,15 @@ data: {
 
 
 function updateNamedEntLineChart(newlabels, newdata){
-  namedentlinechart.data.labels = newlabels
+  
+  namedentlinechart.data.datasets[0].custom_labels = newlabels[0];
+  namedentlinechart.data.datasets[1].custom_labels = newlabels[1];
+  namedentlinechart.data.datasets[2].custom_labels = newlabels[2];
+
+
   namedentlinechart.data.datasets[0].data = newdata[0];
   namedentlinechart.data.datasets[1].data = newdata[1];
   namedentlinechart.data.datasets[2].data = newdata[2];
   namedentlinechart.update();
+  
 }
