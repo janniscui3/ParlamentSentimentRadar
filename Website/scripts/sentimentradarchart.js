@@ -82,7 +82,7 @@ var sentimentradarchart = new Chart(ctx3, {
       },
       pointLabels: {
         fontSize: 15,
-        fontColor: ["green","blue","red"]
+        fontColor: ["#1cc88a","#4e73df","#f759c3"]
       }
       
     },
