@@ -373,6 +373,14 @@ public class ParlamentSentimentRadar {
 
                         connectionHandler.replaceDocument("statistics", "sentiment", tempsentimentdoc);
                         break;
+                    case "27":
+                        break;
+                    case "28":
+                        break;
+                    case "29":
+                        break;
+                    case "30":
+                        break;
                     default:
                         System.out.println("Falsche Eingabe.");
                         break;
