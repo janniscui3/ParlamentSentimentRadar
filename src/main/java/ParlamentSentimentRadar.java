@@ -5,6 +5,7 @@ import Database.MongoDBConnectionHandler;
 import NLP.CASFolderDeserializer;
 import NLP.CASFolderSerializer;
 import XMLReader.ReadFolderOfXML;
+import XMLReader.WebCrawler;
 import it.unimi.dsi.fastutil.Hash;
 import org.bson.Document;
 import org.json.JSONObject;
@@ -54,6 +55,7 @@ public class ParlamentSentimentRadar {
             }
 
             System.out.println("Wählen sie, was sie machen wollen.");
+            System.out.println("Drücke 11, um die Bilder von den abgeordneten herunterzuladen.");
             System.out.println("Drücke 12, um die Protokollen in die MongoDB hochzuladen (DAUERT LANGE).");
             System.out.println("Drücke 13, um die Reden in die MongoDB hochzuladen.");
             System.out.println("Drücke 14, um die Abgeordneten in die MongoDB hochzuladen.");
@@ -78,6 +80,14 @@ public class ParlamentSentimentRadar {
                     case "1":
                         System.out.println("Exiting.");
                         break loop;
+                    case "11":
+                        // Add link to bild to each abgeordneten
+                        for (String i : abgeordnetenliste.keySet()) {
+                            String tempname = abgeordnetenliste.get(i).getNachName();
+                            abgeordnetenliste.get(i).addlinktobild(WebCrawler.getPic(tempname));
+                            TimeUnit.SECONDS.sleep(1);
+                        }
+                        break;
                     case "12":
                         connectionHandler.addManyDocumentsToCollection(collectionBuilder.createProtocolCollection(), "protocol", false);
                         break;

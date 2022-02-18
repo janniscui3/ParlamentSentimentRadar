@@ -64,6 +64,10 @@ public class Abgeordnete extends Person_File_Impl {
         this.redeliste = redeliste;
     }
 
+    public void addlinktobild(String link) {
+        this.linktoBild = link;
+    }
+
     public Integer getDurchschnittredelaenge() {
         return durchschnittredelaenge;
     }
@@ -82,6 +86,10 @@ public class Abgeordnete extends Person_File_Impl {
 
     public ArrayList<String> getRedeliste() {
         return redeliste;
+    }
+
+    public String getLinktoBild() {
+        return linktoBild;
     }
 
     // Other Methods

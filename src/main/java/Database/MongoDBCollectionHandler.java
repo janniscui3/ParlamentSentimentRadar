@@ -44,6 +44,7 @@ public class MongoDBCollectionHandler {
                     .append("_id", i)
                     .append("vorname", abgeordnetenliste.get(i).getVorName())
                     .append("nachname", abgeordnetenliste.get(i).getNachName())
+                    .append("linkzubild", abgeordnetenliste.get(i).getLinktoBild())
                     .append("fraktion", abgeordnetenliste.get(i).getFraktionname());
 
             ArrayList<String> redeids = abgeordnetenliste.get(i).getAllRedeIds();

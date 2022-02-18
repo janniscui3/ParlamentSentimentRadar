@@ -72,6 +72,29 @@ public class WebCrawler {
         }
     }
 
+    /**
+     * Method to get a abgeordnetens picture from his name
+     * @author Sam Ghanei
+     * @param name
+     * @return
+     * @throws IOException
+     */
+    public static String getPic(String name) throws IOException {
+        String pic = "";
+
+        try {
+            Document document = Jsoup.connect("https://bilddatenbank.bundestag.de/search/picture-result?" +
+                    "query=" +
+                    name +
+                    "&filterQuery%5Bereignis%5D%5B%5D=Portr%C3%A4t%2FPortrait&sortVal=3#group-1").get();
+            Elements elements = document.select("img");
+            pic = elements.get(2).absUrl("src");
+        } catch (Exception e) {
+            System.out.println("Fehler beim fetchen vom Bild");
+        }
+        System.out.println(pic);
+        return pic;
+    }
     /** Main method used to download all XMLS into resource folder.
      * Just run this class and it will download all the XML's
      * @author Jannis Cui
