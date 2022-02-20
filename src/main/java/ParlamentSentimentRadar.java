@@ -39,12 +39,8 @@ public class ParlamentSentimentRadar {
         TimeUnit.SECONDS.sleep(2);
         loop: while(true) {
             while (init) {
-                System.out.println("Wählen sie den Pfad des Ordners an, in dem die XML Dateien sind, oder schreibe skip: ");
-                filepath = scanner.nextLine();
-                if (filepath.equals("skip")) {
-                    init = false;
-                    break;
-                }
+                filepath = "src/main/resources/Bundestag90";
+
                 ReadFolderOfXML reader = new ReadFolderOfXML();
                 init = reader.initialize(filepath);
                 abgeordnetenliste = reader.getAbgeordnetenliste();
@@ -83,7 +79,7 @@ public class ParlamentSentimentRadar {
                     case "11":
                         // Add link to bild to each abgeordneten
                         for (String i : abgeordnetenliste.keySet()) {
-                            String tempname = abgeordnetenliste.get(i).getNachName();
+                            String tempname = abgeordnetenliste.get(i).getVorName();
                             abgeordnetenliste.get(i).addlinktobild(WebCrawler.getPic(tempname));
                             TimeUnit.SECONDS.sleep(1);
                         }
