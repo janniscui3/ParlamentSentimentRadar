@@ -8,11 +8,12 @@ function initiatePage(){
     getPOS();
     getSentiment();
     getNamedentities();
+    getSpeakers();
     //updateTokenLineChart(["Peter","Olaf","Martin"],[13,23,400])
     
     
    
-    updateSpeakerBarChart(["Peter","Olaf","Martin"],[13,23,400]);
+    
 }
 
 function getProgress(){
@@ -234,4 +235,71 @@ function getNamedentities(){
             }
         });			
     });    
+}
+
+function getSpeakers(){
+    $(function(){
+		$.ajax({
+			method: "GET",
+            dataType: "json",
+			url: "http://localhost:4567/speaker",	
+
+            success: function(data){
+
+                if (data["success"] == "true"){
+                    var speakerlist = data["result"];
+                    
+                    var idlist = []
+                    var namelist = []
+                    var urllist = []
+                    var speechcount = []
+
+                    for(var i = 0; i < 50; i++){
+                        idlist.push(speakerlist[i]["_id"]);
+                        namelist.push(speakerlist[i]["vorname"]+" "+speakerlist[i]["nachname"]);
+                        urllist.push(speakerlist[i]["linkzubild"]);
+                        speechcount.push((speakerlist[i]["rede"]).length);
+                    }
+                                     
+                    
+                    updateSpeakerBarChart(idlist, namelist, speechcount, urllist);
+
+                    
+                    
+                    
+                    /*
+                    for(var i = 0; i < sentiment_list.length; i++) {
+                        var curr_sentiment = parseFloat(sentiment_list[i]["sentiment"]);
+                        var curr_count = sentiment_list[i]["count"];
+                        
+
+                        if(curr_sentiment > 0){
+                            sentimentcounter[0] += curr_count;
+                        }
+                        else if(curr_sentiment === 0){
+                            
+                            sentimentcounter[1] += curr_count;    
+                        }
+                        else{
+                            sentimentcounter[2] += curr_count;   
+                        }
+                    }
+                    
+
+                    updateSentimentRadarChart(sentimentcounter);
+                    
+                    */
+                }
+                else{
+                    alert("ERROR");
+                }
+
+                
+            },
+            error: function (error){
+                alert("ERROR");
+            }
+        });			
+    });    
+
 }
