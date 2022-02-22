@@ -35,7 +35,7 @@ public class ReadFolderOfXML {
                         sitzungliste.putAll(templist3);
                         countfiles++;
                     }
-                } catch (NullPointerException e) {
+                } catch (Exception e) {
                     System.out.println("Das File/Ordner wurde nicht gefunden.");
                 }
 
