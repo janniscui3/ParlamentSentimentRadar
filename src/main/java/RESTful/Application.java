@@ -1,10 +1,15 @@
 package RESTful;
 
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 import org.json.JSONObject;
 import spark.Filter;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import Database.MongoDBConnectionHandler;
 import static spark.Spark.*;
@@ -80,6 +85,22 @@ public class Application {
             return doc.toJson();
         });
 
+        get("/speaker", (req, res) -> {
+            MongoCollection<Document> collection = connectionHandler.getCollection("speaker");
+            Document doc = new Document();
+            List<Document> listdoc = new ArrayList<>();
+
+            FindIterable<Document> iterDoc = collection.find();
+            Iterator it = iterDoc.iterator();
+            while (it.hasNext()) {
+                listdoc.add((Document) it.next());
+            }
+
+            doc.append("result", listdoc);
+            doc.append("success", "true");
+            res.raw().setContentType("application/json");
+            return doc.toJson();
+        });
         get("/speaker/:id", (req, res) -> {
             String sID = req.params(":id");
             Document doc = connectionHandler.getDocumentFromCollection(sID, "speaker");
