@@ -46,7 +46,9 @@ var speakerbarchart = new Chart(ctx5, {
             backgroundColor: "#4e73df",
             hoverBackgroundColor: "#2e59d9",
             borderColor: "#4e73df",
+            speakerids: [],
             data: [],
+            picture_links: [],
             order: 1
         }],
     },
@@ -95,7 +97,8 @@ var speakerbarchart = new Chart(ctx5, {
         display: false
         },
         tooltips: {
-         
+        
+        
         titleMarginBottom: 10,
         titleFontColor: '#6e707e',
         titleFontSize: 14,
@@ -112,17 +115,44 @@ var speakerbarchart = new Chart(ctx5, {
             var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
             return datasetLabel + number_format(tooltipItem.yLabel)  ;
             }
+        }, 
+        custom: (tooltipModel, chart) =>{
+          
+          var picture = document.getElementById("picture")
+  
+          // Hide if no tooltip
+          if (tooltipModel.opacity === 0) {
+            picture.style.opacity = 0;
+            return;
+          }
+  
+          picture.style.opacity = 1;
+          picture.style.top = tooltipModel.y - 100 + "px"
+          picture.style.left = tooltipModel.x - 50 + "px"
+          
+          var tootltipindex = tooltipModel.dataPoints[0].index;
+          
+          picture.src = speakerbarchart.data.datasets[0].picture_links[tootltipindex]
+  
+  
+          
+  
+  
         }
         
-             
-        },
+
+      }
+
+      
     }
 });
 
 
 
-function updateSpeakerBarChart(newlabels, newdata){
+function updateSpeakerBarChart(newids, newlabels, newdata, newlinks){
+  speakerbarchart.data.datasets[0].speakerids = newids;
   speakerbarchart.data.labels = newlabels;
   speakerbarchart.data.datasets[0].data = newdata;
+  speakerbarchart.data.datasets[0].picture_links = newlinks;
   speakerbarchart.update();
 }
