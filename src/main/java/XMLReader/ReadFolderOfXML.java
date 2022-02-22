@@ -5,7 +5,13 @@ import Data.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-
+/**
+ * Returns a ReadSingleXML Object, that gets a single XML
+ * File as input and can do various operations on it, such as
+ * returning a list of abgeordneten or reden from a given XML.
+ *
+ * @author Sam Ghanei
+ */
 public class ReadFolderOfXML {
     //Fields
     HashMap<String, Abgeordnete> abgeordnetenliste = new HashMap<>();

@@ -76,7 +76,7 @@ public class WebCrawler {
      * Method to get a abgeordnetens picture from his name
      * @author Sam Ghanei
      * @param name
-     * @return
+     * @return link to picture
      * @throws IOException
      */
     public static String getPic(String name) throws IOException {
