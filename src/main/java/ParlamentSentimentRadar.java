@@ -74,12 +74,13 @@ public class ParlamentSentimentRadar {
                 switch (choose) {
                     // To exit, just break the main loop.
                     case "1":
+
                         System.out.println("Exiting.");
                         break loop;
                     case "11":
                         // Add link to bild to each abgeordneten
                         for (String i : abgeordnetenliste.keySet()) {
-                            String tempname = abgeordnetenliste.get(i).getVorName();
+                            String tempname = abgeordnetenliste.get(i).getNachName();
                             abgeordnetenliste.get(i).addlinktobild(WebCrawler.getPic(tempname));
                             TimeUnit.SECONDS.sleep(1);
                         }

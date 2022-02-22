@@ -101,9 +101,24 @@ public class Application {
             res.raw().setContentType("application/json");
             return doc.toJson();
         });
+
         get("/speaker/:id", (req, res) -> {
             String sID = req.params(":id");
             Document doc = connectionHandler.getDocumentFromCollection(sID, "speaker");
+            res.raw().setContentType("application/json");
+            return doc.toJson();
+        });
+
+        get("/protocol/:id", (req, res) -> {
+            String sID = req.params(":id");
+            Document doc = connectionHandler.getDocumentFromCollection(sID, "protocol");
+            res.raw().setContentType("application/json");
+            return doc.toJson();
+        });
+
+        get("/speech/:id", (req, res) -> {
+            String sID = req.params(":id");
+            Document doc = connectionHandler.getDocumentFromCollection(sID, "speech");
             res.raw().setContentType("application/json");
             return doc.toJson();
         });
