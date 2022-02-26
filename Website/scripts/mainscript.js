@@ -9,6 +9,8 @@ function initiatePage(){
     getSentiment();
     getNamedentities();
     getSpeakers();
+    getProtocols();
+
     //updateTokenLineChart(["Peter","Olaf","Martin"],[13,23,400])
     
     
@@ -203,28 +205,7 @@ function getNamedentities(){
                     
                     
                     
-                    /*
-                    for(var i = 0; i < sentiment_list.length; i++) {
-                        var curr_sentiment = parseFloat(sentiment_list[i]["sentiment"]);
-                        var curr_count = sentiment_list[i]["count"];
-                        
-
-                        if(curr_sentiment > 0){
-                            sentimentcounter[0] += curr_count;
-                        }
-                        else if(curr_sentiment === 0){
-                            
-                            sentimentcounter[1] += curr_count;    
-                        }
-                        else{
-                            sentimentcounter[2] += curr_count;   
-                        }
-                    }
-                    
-
-                    updateSentimentRadarChart(sentimentcounter);
-                    
-                    */
+                
                 }
                 else{
                     console.log("ERROR");
@@ -269,32 +250,155 @@ function getSpeakers(){
                     
                     
                     
-                    /*
-                    for(var i = 0; i < sentiment_list.length; i++) {
-                        var curr_sentiment = parseFloat(sentiment_list[i]["sentiment"]);
-                        var curr_count = sentiment_list[i]["count"];
-                        
-
-                        if(curr_sentiment > 0){
-                            sentimentcounter[0] += curr_count;
-                        }
-                        else if(curr_sentiment === 0){
-                            
-                            sentimentcounter[1] += curr_count;    
-                        }
-                        else{
-                            sentimentcounter[2] += curr_count;   
-                        }
-                    }
-                    
-
-                    updateSentimentRadarChart(sentimentcounter);
-                    
-                    */
+                  
                 }
                 else{
                     console.log("ERROR");
                 }
+
+                
+            },
+            error: function (error){
+                console.log("ERROR");
+            }
+        });			
+    });    
+
+}
+
+
+function getProtocols(){
+    $(function(){
+		$.ajax({
+			method: "GET",
+            dataType: "json",
+			url: "http://localhost:4567/protocol",	
+
+            success: function(data){
+
+                if (data["success"] == "true"){
+                    var tempprotocollist = data["ids"];
+                    
+                    createProtocolSelect(tempprotocollist);
+                    
+                  
+                }
+                else{
+                    console.log("ERROR");
+                }
+
+                
+            },
+            error: function (error){
+                console.log("ERROR");
+            }
+        });			
+    });    
+    
+}
+
+function getAgendaitems(protocolid){
+    var select2 = document.getElementById("select2");
+
+    var i, L = select2.options.length - 1;
+    for(i = L; i >= 0; i--) {
+      select2.remove(i);
+    }
+
+    var select3 = document.getElementById("select3");
+
+    var i, L = select3.options.length - 1;
+    for(i = L; i >= 0; i--) {
+      select3.remove(i);
+    }
+    
+    console.log(protocolid)
+    $(function(){
+		$.ajax({
+			method: "GET",
+            dataType: "json",
+			url: "http://localhost:4567/protocol/" + protocolid,	
+
+            success: function(data){
+
+            
+                
+                var tempprotocol = data["tagesordnungen"]
+                var agendaitemlist = []
+                
+                for(var i = 0; i < tempprotocol.length; i++){
+                    agendaitemlist.push(tempprotocol[i]["_id"]);
+                }
+                
+                
+                createAgendaSelect(agendaitemlist, protocolid)
+                
+                
+
+                
+            },
+            error: function (error){
+                console.log("ERROR");
+            }
+        });			
+    });    
+    
+}
+
+function getSpeeches(agendaid, protocolid ){
+    var select3 = document.getElementById("select3");
+
+    var i, L = select3.options.length - 1;
+    for(i = L; i >= 0; i--) {
+      select3.remove(i);
+    }
+    
+    
+    $(function(){
+		$.ajax({
+			method: "GET",
+            dataType: "json",
+			url: "http://localhost:4567/protocol/" + protocolid,	
+
+            success: function(data){
+
+            
+                
+                var tempprotocol = data["tagesordnungen"]
+                var curr_protocol = tempprotocol.find(item => item._id === agendaid);
+                
+                
+                var speechlist = curr_protocol.rede;
+                
+                createSpeechSelect(speechlist, protocolid);
+                
+
+                
+            },
+            error: function (error){
+                console.log("ERROR");
+            }
+        });			
+    });    
+    
+}
+
+function getSpeechText(speechid){
+    $(function(){
+		$.ajax({
+			method: "GET",
+            dataType: "json",
+			url: "http://localhost:4567/speech/" + speechid,	
+
+            success: function(data){
+
+                var paragraphs = data["paragraphs:"]
+                var text = paragraphs.join('')
+                
+                
+                
+                insertSpeech(text);
+                
 
                 
             },
