@@ -131,8 +131,11 @@ var speakerbarchart = new Chart(ctx5, {
           picture.style.left = tooltipModel.x - 50 + "px"
           
           var tootltipindex = tooltipModel.dataPoints[0].index;
-          
-          picture.src = speakerbarchart.data.datasets[0].picture_links[tootltipindex]
+          var link = speakerbarchart.data.datasets[0].picture_links[tootltipindex];
+          if(link === ""){
+            link = "https://icon-library.com/images/default-profile-icon/default-profile-icon-16.jpg"
+          }
+          picture.src = link;
   
   
           

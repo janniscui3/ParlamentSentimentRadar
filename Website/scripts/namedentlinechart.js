@@ -84,6 +84,7 @@ data: {
     ],
   },
   options: {
+    responsive: true,
     maintainAspectRatio: false,
     layout: {
       padding: {
@@ -127,7 +128,7 @@ data: {
       }],
     },
     legend: {
-      display: false
+      display: true
     },
     tooltips: {
       titleMarginBottom: 10,

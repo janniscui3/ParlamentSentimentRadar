@@ -37,12 +37,12 @@ function getProgress(){
 
                 }
                 else{
-                    alert("ERROR");
+                    console.log("ERROR");
                 }           
                 
             },
             error: function (xhr, ajaxOptions, thrownError){
-                alert("ERROR (" + xhr.status + ")");
+                console.log("ERROR (" + xhr.status + ")");
                 
             }
         });					
@@ -73,12 +73,12 @@ function getTokens(){
                   
                 }
                 else{
-                    alert("ERROR");
+                    console.log("ERROR");
                 }           
                 
             },
             error: function (xhr, ajaxOptions, thrownError){
-                alert("ERROR (" + xhr.status + ")");
+                console.log("ERROR (" + xhr.status + ")");
                 
             }
         });					
@@ -109,12 +109,12 @@ function getPOS(){
                   
                 }
                 else{
-                    alert("ERROR");
+                    console.log("ERROR");
                 }           
                 
             },
             error: function (xhr, ajaxOptions, thrownError){
-                alert("ERROR (" + xhr.status + ")");
+                console.log("ERROR (" + xhr.status + ")");
                 
             }
         });					
@@ -156,11 +156,11 @@ function getSentiment(){
                   
                 }
                 else{
-                    alert("ERROR");
+                    console.log("ERROR");
                 }
             },
             error: function (error){
-                alert("ERROR");
+                console.log("ERROR");
             }
         });			
     });    
@@ -227,11 +227,11 @@ function getNamedentities(){
                     */
                 }
                 else{
-                    alert("ERROR");
+                    console.log("ERROR");
                 }
             },
             error: function (error){
-                alert("ERROR");
+                console.log("ERROR");
             }
         });			
     });    
@@ -253,6 +253,8 @@ function getSpeakers(){
                     var namelist = []
                     var urllist = []
                     var speechcount = []
+
+                    speakerlist.sort(function(a,b){return (b["rede"].length) - (a["rede"].length)})
 
                     for(var i = 0; i < 50; i++){
                         idlist.push(speakerlist[i]["_id"]);
@@ -291,13 +293,13 @@ function getSpeakers(){
                     */
                 }
                 else{
-                    alert("ERROR");
+                    console.log("ERROR");
                 }
 
                 
             },
             error: function (error){
-                alert("ERROR");
+                console.log("ERROR");
             }
         });			
     });    
