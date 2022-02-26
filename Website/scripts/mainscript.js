@@ -296,3 +296,89 @@ function getProtocols(){
     });    
     
 }
+
+function getAgendaitems(protocolid){
+    var select2 = document.getElementById("select2");
+
+    var i, L = select2.options.length - 1;
+    for(i = L; i >= 0; i--) {
+      select2.remove(i);
+    }
+
+    var select3 = document.getElementById("select3");
+
+    var i, L = select3.options.length - 1;
+    for(i = L; i >= 0; i--) {
+      select3.remove(i);
+    }
+    
+    console.log(protocolid)
+    $(function(){
+		$.ajax({
+			method: "GET",
+            dataType: "json",
+			url: "http://localhost:4567/protocol/" + protocolid,	
+
+            success: function(data){
+
+            
+                
+                var tempprotocol = data["tagesordnungen"]
+                var agendaitemlist = []
+                
+                for(var i = 0; i < tempprotocol.length; i++){
+                    agendaitemlist.push(tempprotocol[i]["_id"]);
+                }
+                
+                
+                createAgendaSelect(agendaitemlist, protocolid)
+                
+                
+
+                
+            },
+            error: function (error){
+                console.log("ERROR");
+            }
+        });			
+    });    
+    
+}
+
+function getSpeeches(agendaid, protocolid ){
+    var select3 = document.getElementById("select3");
+
+    var i, L = select3.options.length - 1;
+    for(i = L; i >= 0; i--) {
+      select3.remove(i);
+    }
+    
+    
+    $(function(){
+		$.ajax({
+			method: "GET",
+            dataType: "json",
+			url: "http://localhost:4567/protocol/" + protocolid,	
+
+            success: function(data){
+
+            
+                
+                var tempprotocol = data["tagesordnungen"]
+                var curr_protocol = tempprotocol.find(item => item._id === agendaid);
+                
+                console.log(curr_protocol)
+                var speechlist = curr_protocol.rede;
+                
+                createSpeechSelect(speechlist, protocolid);
+                
+
+                
+            },
+            error: function (error){
+                console.log("ERROR");
+            }
+        });			
+    });    
+    
+}
