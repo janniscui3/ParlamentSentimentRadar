@@ -283,7 +283,7 @@
                                     <div class="chart-area">
                                         <canvas id="speaker_bar_chart"></canvas>
                                     </div>
-                                    <img id="picture" src="Angela_Merkel_2019_cropped.jpg" alt="" style="height: auto; width: auto; max-height: 150px; background-color: white; position: absolute; top:100px; left:100px; opacity: 0;">
+                                    <img id="picture" src="" alt="" style="height: auto; width: auto; max-height: 150px; background-color: white; position: absolute; top:100px; left:100px; opacity: 0;">
                                 </div>
                             </div>
                         </div>
@@ -299,6 +299,10 @@
                                 <div
                                 class="card-header py-3 d-flex flex-row align-items-center">
                                 <h6 class="m-0 font-weight-bold text-primary mr-auto">Rede</h6> 
+                                <div class="wrapper m-0" style="width:200px; padding:0px; height: 40px;">
+                                    <select name="" onchange="location = this.value;" id="select1" class="form-control" onfocus='this.size=5;' onblur='this.size=1;' onchange='this.size=1; this.blur();'>
+                                    
+                                </select></div>
                                 </div>
                                 <!-- Card Body -->
                                 
@@ -382,7 +386,7 @@
     <script src="scripts/sentimentradarchart.js"></script>
     <script src="scripts/namedentlinechart.js"></script>
     <script src="scripts/speakerbarchart.js"></script>
-
+    <script src="scripts/speechfield.js"></script>
 </body>
 
 </html>

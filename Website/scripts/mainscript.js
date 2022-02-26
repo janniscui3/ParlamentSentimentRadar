@@ -9,6 +9,8 @@ function initiatePage(){
     getSentiment();
     getNamedentities();
     getSpeakers();
+    getProtocols();
+
     //updateTokenLineChart(["Peter","Olaf","Martin"],[13,23,400])
     
     
@@ -203,28 +205,7 @@ function getNamedentities(){
                     
                     
                     
-                    /*
-                    for(var i = 0; i < sentiment_list.length; i++) {
-                        var curr_sentiment = parseFloat(sentiment_list[i]["sentiment"]);
-                        var curr_count = sentiment_list[i]["count"];
-                        
-
-                        if(curr_sentiment > 0){
-                            sentimentcounter[0] += curr_count;
-                        }
-                        else if(curr_sentiment === 0){
-                            
-                            sentimentcounter[1] += curr_count;    
-                        }
-                        else{
-                            sentimentcounter[2] += curr_count;   
-                        }
-                    }
-                    
-
-                    updateSentimentRadarChart(sentimentcounter);
-                    
-                    */
+                
                 }
                 else{
                     console.log("ERROR");
@@ -269,28 +250,7 @@ function getSpeakers(){
                     
                     
                     
-                    /*
-                    for(var i = 0; i < sentiment_list.length; i++) {
-                        var curr_sentiment = parseFloat(sentiment_list[i]["sentiment"]);
-                        var curr_count = sentiment_list[i]["count"];
-                        
-
-                        if(curr_sentiment > 0){
-                            sentimentcounter[0] += curr_count;
-                        }
-                        else if(curr_sentiment === 0){
-                            
-                            sentimentcounter[1] += curr_count;    
-                        }
-                        else{
-                            sentimentcounter[2] += curr_count;   
-                        }
-                    }
-                    
-
-                    updateSentimentRadarChart(sentimentcounter);
-                    
-                    */
+                  
                 }
                 else{
                     console.log("ERROR");
@@ -304,4 +264,35 @@ function getSpeakers(){
         });			
     });    
 
+}
+
+
+function getProtocols(){
+    $(function(){
+		$.ajax({
+			method: "GET",
+            dataType: "json",
+			url: "http://localhost:4567/protocol",	
+
+            success: function(data){
+
+                if (data["success"] == "true"){
+                    var tempprotocollist = data["ids"];
+                    
+                    createProtocolSelect(tempprotocollist);
+                    
+                  
+                }
+                else{
+                    console.log("ERROR");
+                }
+
+                
+            },
+            error: function (error){
+                console.log("ERROR");
+            }
+        });			
+    });    
+    
 }
