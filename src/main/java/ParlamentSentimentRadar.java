@@ -67,6 +67,7 @@ public class ParlamentSentimentRadar {
             System.out.println("Drücke 24, um die Sentimentverteilung pro Redner zu kriegen (Alle reden müssen geladen sein).");
             System.out.println("Drücke 25, um die Sentimentverteilung pro Partei zu kriegen (Alle reden müssen geladen sein).");
             System.out.println("Drücke 26, um die allgemeine Sentimentverteilung zu kriegen und sie hochzuladen.");
+            System.out.println("Drücke 27, um die protokolids hochzuladen.");
             String choose = scanner.nextLine();
 
             try {
@@ -381,6 +382,16 @@ public class ParlamentSentimentRadar {
                         connectionHandler.replaceDocument("statistics", "sentiment", tempsentimentdoc);
                         break;
                     case "27":
+
+                        Document tempprotokolls = new Document();
+                        List<String> listofprotokollids = new ArrayList<>();
+
+                        for (String i: sitzungliste.keySet()) {
+                            listofprotokollids.add(i);
+                        }
+                        tempprotokolls.append("ids", listofprotokollids);
+                        tempprotokolls.append("success", "true");
+                        connectionHandler.replaceDocument("statistics", "protocolids", tempprotokolls);
                         break;
                     case "28":
                         break;

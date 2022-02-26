@@ -252,7 +252,6 @@
 /src/main/resources/Bundestag90/20013-data.xml
 /src/main/resources/Bundestag90/20014-data.xml
 /src/main/resources/Bundestag90/20015-data.xml
-/src/main/resources/am_posmap.txt
 /target/classes/Bundestag90/19001-data.xml
 /target/classes/Bundestag90/19002-data.xml
 /target/classes/Bundestag90/19003-data.xml
@@ -527,4 +526,3 @@
 /target/classes/am_posmap.txt
 /target/classes/config.properties
 /target/classes/ParlamentSentimentRadar.class
-/dbtplenarprotokoll.dtd

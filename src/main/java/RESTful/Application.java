@@ -109,6 +109,12 @@ public class Application {
             return doc.toJson();
         });
 
+        get("/protocol", (req, res) -> {
+            Document doc = connectionHandler.getDocumentFromCollection("protocolids", "statistics");
+            res.raw().setContentType("application/json");
+            return doc.toJson();
+        });
+
         get("/protocol/:id", (req, res) -> {
             String sID = req.params(":id");
             Document doc = connectionHandler.getDocumentFromCollection(sID, "protocol");
