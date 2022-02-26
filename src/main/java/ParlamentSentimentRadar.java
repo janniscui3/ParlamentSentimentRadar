@@ -21,7 +21,7 @@ import static Utilities.Util.sortByValueDescending;
  * Main Class, from which everything is handled.
  * Contains an rudimentary UI using the console.
  *
- * @author Jannis Cui
+ * @author Jannis Cui, Sam Ghanei, Hussein Khalil
  */
 public class ParlamentSentimentRadar {
     public static void main(String[] args) throws InterruptedException {

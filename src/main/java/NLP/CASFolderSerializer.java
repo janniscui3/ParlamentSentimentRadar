@@ -70,13 +70,12 @@ public class CASFolderSerializer {
                             .append("_id", redeid)
                             .append("xmlstring", everything);
 
-                    listofdocuments.add(doc);
+                    mongoDBConnectionHandler.addDocumentToCollection(doc, "CAS");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
         }
-        mongoDBConnectionHandler.addManyDocumentsToCollection(listofdocuments, "CAS", false);
     }
 }

@@ -15,7 +15,7 @@ import Database.MongoDBConnectionHandler;
 import static spark.Spark.*;
 
 /** Spark that will run the api.
- * @Author Jannis Cui, Timo Eisert
+ * @Author Jannis Cui, Timo Eisert, Sam Ghanei, Hussein Khalil
  */
 public class Application {
     public static void main(String[] args) {
