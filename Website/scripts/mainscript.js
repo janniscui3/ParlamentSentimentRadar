@@ -367,7 +367,7 @@ function getSpeeches(agendaid, protocolid ){
                 var tempprotocol = data["tagesordnungen"]
                 var curr_protocol = tempprotocol.find(item => item._id === agendaid);
                 
-                console.log(curr_protocol)
+                
                 var speechlist = curr_protocol.rede;
                 
                 createSpeechSelect(speechlist, protocolid);
@@ -381,4 +381,31 @@ function getSpeeches(agendaid, protocolid ){
         });			
     });    
     
+}
+
+function getSpeechText(speechid){
+    $(function(){
+		$.ajax({
+			method: "GET",
+            dataType: "json",
+			url: "http://localhost:4567/speech/" + speechid,	
+
+            success: function(data){
+
+                var paragraphs = data["paragraphs:"]
+                var text = paragraphs.join('')
+                
+                
+                
+                insertSpeech(text);
+                
+
+                
+            },
+            error: function (error){
+                console.log("ERROR");
+            }
+        });			
+    });    
+
 }

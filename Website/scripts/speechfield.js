@@ -37,12 +37,12 @@ function createAgendaSelect(agendaitems, protocolid){
 }
 
 function createSpeechSelect(speeches){
-    console.log(speeches)
+    
     var select3 = document.getElementById("select3");
     for (var i = 0; i < speeches.length; i++) {
         var opt = document.createElement('option');
         
-        var link = 'javascript:insertSpeech(' + '"' + speeches[i] + '"' +  ');';
+        var link = 'javascript:getSpeechText(' + '"' + speeches[i] + '"' +  ');';
         
         opt.value = link;
         
@@ -53,6 +53,8 @@ function createSpeechSelect(speeches){
     }
 }
 
-function insertSpeech(speechid){
-    alert(speechid)
+function insertSpeech(text){
+    var textfield = document.getElementById("color-text");
+    textfield.innerHTML = text;
+  
 }
