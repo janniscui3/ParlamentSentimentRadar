@@ -1,3 +1,8 @@
+//AUTOR: Timo Eisert (7470259)
+
+// This js file handles the speech viewer at the bottom of the page
+
+// This function inserts the protocols into the first selection box
 function createProtocolSelect(protocollist){
     
     var select1 = document.getElementById("select1");
@@ -11,12 +16,12 @@ function createProtocolSelect(protocollist){
         
         opt.innerHTML = protocollist[i];
         select1.appendChild(opt);
-        
-        
+             
     }
 
 }
 
+// This function inserts the agendaitems into the second selection box
 function createAgendaSelect(agendaitems, protocolid){
     
     var select2 = document.getElementById("select2");
@@ -29,13 +34,12 @@ function createAgendaSelect(agendaitems, protocolid){
         
         opt.innerHTML = agendaitems[i];
         select2.appendChild(opt);
-        
-        
+              
     }
-
 
 }
 
+// This function inserts the speeches into the third selection box
 function createSpeechSelect(speeches){
     
     var select3 = document.getElementById("select3");
@@ -53,6 +57,7 @@ function createSpeechSelect(speeches){
     }
 }
 
+// This function inserts the speech text into the text field
 function insertSpeech(text){
     var textfield = document.getElementById("color-text");
     textfield.innerHTML = text;

@@ -9,15 +9,11 @@ function initiatePage(){
     getSentiment();
     getNamedentities();
     getSpeakers();
-    getProtocols();
-
-    //updateTokenLineChart(["Peter","Olaf","Martin"],[13,23,400])
-    
-    
-   
+    getProtocols();   
     
 }
 
+// This function gets the progress data from the database (For the progress bar in the top right corner)
 function getProgress(){
     $(function(){
 		$.ajax({
@@ -31,9 +27,8 @@ function getProgress(){
                     var total = parseInt(data["total"]);
 
                     var percentage = Math.floor(((already_processed / total) * 100))
-                    
                     var progressbar = document.getElementById("progressbar1");
-                    
+                   
                     progressbar.innerHTML = percentage + "%"
                     progressbar.style = "width: " + percentage + "%"
 
@@ -49,11 +44,10 @@ function getProgress(){
             }
         });					
     });        
-
 }
 
+// This function gets the token data from the database
 function getTokens(){
-
     $(function(){
 		$.ajax({
 			method: "GET",
@@ -80,15 +74,14 @@ function getTokens(){
                 
             },
             error: function (xhr, ajaxOptions, thrownError){
-                console.log("ERROR (" + xhr.status + ")");
-                
+                console.log("ERROR (" + xhr.status + ")");                
             }
         });					
     });        
 }
 
+// This function gets the POS data from the database
 function getPOS(){
-
     $(function(){
 		$.ajax({
 			method: "GET",
@@ -123,6 +116,7 @@ function getPOS(){
     });        
 }
 
+// This function gets the sentiment data from the database
 function getSentiment(){
     $(function(){
 		$.ajax({
@@ -168,6 +162,7 @@ function getSentiment(){
     });    
 }
 
+// This function gets the namedentity data from the database
 function getNamedentities(){
     $(function(){
 		$.ajax({
@@ -198,14 +193,9 @@ function getNamedentities(){
                         count_list[1].push(organisation_list[i]["count"]);
                         count_list[2].push(person_list[i]["count"]);
                     }
-
                     
-                    updateNamedEntLineChart(label_list,count_list);
-
-                    
-                    
-                    
-                
+                    updateNamedEntLineChart(label_list,count_list);                                  
+                                   
                 }
                 else{
                     console.log("ERROR");
@@ -218,6 +208,7 @@ function getNamedentities(){
     });    
 }
 
+// This function gets the speaker data from the database
 function getSpeakers(){
     $(function(){
 		$.ajax({
@@ -245,28 +236,23 @@ function getSpeakers(){
                     }
                                      
                     
-                    updateSpeakerBarChart(idlist, namelist, speechcount, urllist);
-
-                    
-                    
-                    
+                    updateSpeakerBarChart(idlist, namelist, speechcount, urllist);                   
                   
                 }
                 else{
                     console.log("ERROR");
                 }
 
-                
             },
             error: function (error){
                 console.log("ERROR");
             }
         });			
     });    
-
 }
 
 
+// This function gets the protocol data from the database (For the speech selection)
 function getProtocols(){
     $(function(){
 		$.ajax({
@@ -279,24 +265,23 @@ function getProtocols(){
                 if (data["success"] == "true"){
                     var tempprotocollist = data["ids"];
                     
-                    createProtocolSelect(tempprotocollist);
-                    
+                    // tempprotocollist contains all protocol ids
+                    createProtocolSelect(tempprotocollist);                    
                   
                 }
                 else{
                     console.log("ERROR");
                 }
-
                 
             },
             error: function (error){
                 console.log("ERROR");
             }
         });			
-    });    
-    
+    });        
 }
 
+// This function gets the agendaitem data from the database (For the speech selection)
 function getAgendaitems(protocolid){
     var select2 = document.getElementById("select2");
 
@@ -320,9 +305,7 @@ function getAgendaitems(protocolid){
 			url: "http://localhost:4567/protocol/" + protocolid,	
 
             success: function(data){
-
-            
-                
+                            
                 var tempprotocol = data["tagesordnungen"]
                 var agendaitemlist = []
                 
@@ -330,21 +313,18 @@ function getAgendaitems(protocolid){
                     agendaitemlist.push(tempprotocol[i]["_id"]);
                 }
                 
-                
+                // agendaitemlist contains all agendaitems of the protocol (at protocolid)
                 createAgendaSelect(agendaitemlist, protocolid)
-                
-                
-
-                
+                            
             },
             error: function (error){
                 console.log("ERROR");
             }
         });			
-    });    
-    
+    });        
 }
 
+// This function gets the speech data from the database (For the speech selection)
 function getSpeeches(agendaid, protocolid ){
     var select3 = document.getElementById("select3");
 
@@ -352,8 +332,7 @@ function getSpeeches(agendaid, protocolid ){
     for(i = L; i >= 0; i--) {
       select3.remove(i);
     }
-    
-    
+        
     $(function(){
 		$.ajax({
 			method: "GET",
@@ -362,27 +341,22 @@ function getSpeeches(agendaid, protocolid ){
 
             success: function(data){
 
-            
-                
                 var tempprotocol = data["tagesordnungen"]
-                var curr_protocol = tempprotocol.find(item => item._id === agendaid);
-                
-                
+                var curr_protocol = tempprotocol.find(item => item._id === agendaid);                              
                 var speechlist = curr_protocol.rede;
                 
+                // speechlist contains all speeches of a specific agendaitem (of a specific protocol)
                 createSpeechSelect(speechlist, protocolid);
-                
-
-                
+                                
             },
             error: function (error){
                 console.log("ERROR");
             }
         });			
-    });    
-    
+    });       
 }
 
+// This function gets the speech text from the database (For the speech selection)
 function getSpeechText(speechid){
     $(function(){
 		$.ajax({
@@ -395,17 +369,13 @@ function getSpeechText(speechid){
                 var paragraphs = data["paragraphs:"]
                 var text = paragraphs.join('')
                 
-                
-                
+                // text contains the actual text of specific speech
                 insertSpeech(text);
-                
-
-                
+                               
             },
             error: function (error){
                 console.log("ERROR");
             }
         });			
     });    
-
 }
